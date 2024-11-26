@@ -2,7 +2,9 @@ import {createContext, ReactNode, useContext, useEffect, useState} from "react";
 import {Session} from "@supabase/supabase-js";
 import supabase from "@/lib/supabase.ts";
 
-const SessionContext = createContext<Session | null>(null);
+const SessionContext = createContext<{
+  session: Session | null , isLoading: boolean
+}>({session: null, isLoading: true});
 
 export function useSession() {
   return useContext(SessionContext);
@@ -10,10 +12,21 @@ export function useSession() {
 
 export function SessionProvider({children}: {children: ReactNode}) {
   const [session, setSession] = useState<Session | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    async function fetchSession() {
+      const {data: {session}} = await supabase.auth.getSession()
+      setSession(session)
+      setIsLoading(false)
+    }
+
+    fetchSession()
+  }, []);
+
+  useEffect( () => {
     const {data: {subscription}} = supabase.auth.onAuthStateChange((_, session) => {
-      setSession(session);
+      if(session) setSession(session);
     })
 
     return () => {
@@ -23,7 +36,7 @@ export function SessionProvider({children}: {children: ReactNode}) {
 
 
   return (
-    <SessionContext.Provider value={session}>
+    <SessionContext.Provider value={{session, isLoading}}>
       {children}
     </SessionContext.Provider>
   )
