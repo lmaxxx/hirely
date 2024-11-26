@@ -17,6 +17,8 @@ import {signUp} from "@/features/auth/service.ts";
 import {AuthError} from "@supabase/supabase-js";
 import {toast} from "react-toastify";
 import {NavLink} from "react-router";
+import {useState} from "react";
+import {Loader2} from "lucide-react";
 
 export const formSchema = z.object({
   name: z.string().min(4, {
@@ -31,6 +33,7 @@ export const formSchema = z.object({
 })
 
 export default function SignUpForm() {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,18 +44,20 @@ export default function SignUpForm() {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     try {
-      const data = await signUp(values)
-      console.log(data)
+      const data = await signUp(values);
     } catch (error) {
       if (error instanceof AuthError) {
         toast.error(error.message);
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
-    <Card className="w-[350px]">
+    <Card className="max-w-[350px] w-[95%]">
       <CardHeader>
         <CardTitle>Sign Up</CardTitle>
         <CardDescription>Enter your email and password to sign in to your account.</CardDescription>
@@ -99,7 +104,10 @@ export default function SignUpForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">Sign up</Button>
+            <Button type="submit" disabled={isLoading} className="w-full">
+              {isLoading && <Loader2 className="animate-spin" />}
+              Sign up
+            </Button>
           </form>
         </Form>
       </CardContent>

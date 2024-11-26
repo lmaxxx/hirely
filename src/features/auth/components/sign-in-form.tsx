@@ -16,6 +16,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import {NavLink} from "react-router";
 import {signIn} from "@/features/auth/service.ts";
 import {toast} from "react-toastify";
+import {Loader2} from "lucide-react";
+import {useState} from "react";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -27,27 +29,30 @@ const formSchema = z.object({
 })
 
 export default function SignInForm() {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     try {
-      const data = await signIn(values)
-      console.log(data)
+      const data = await signIn(values);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
-    <Card className="w-[350px]">
+    <Card className="max-w-[350px] w-[95%]">
       <CardHeader>
         <CardTitle>Sign In</CardTitle>
         <CardDescription>Enter your email and password to sign in to your account.</CardDescription>
@@ -81,7 +86,10 @@ export default function SignInForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">Sign In</Button>
+            <Button type="submit" disabled={isLoading} className="w-full">
+              {isLoading && <Loader2 className="animate-spin" />}
+              Sign In
+            </Button>
           </form>
         </Form>
       </CardContent>
