@@ -1,12 +1,15 @@
 import CombinedRoutes from "@/combined-routes.tsx";
 import {Bounce, ToastContainer} from "react-toastify";
+import {SessionProvider} from "@/hooks/useSession.tsx";
 
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function App() {
   return (
     <>
-      <CombinedRoutes/>
+      <SessionProvider>
+        <CombinedRoutes/>
+      </SessionProvider>
       <ToastContainer
         position="top-right"
         autoClose={3000}

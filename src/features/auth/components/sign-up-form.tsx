@@ -16,6 +16,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import {signUp} from "@/features/auth/service.ts";
 import {AuthError} from "@supabase/supabase-js";
 import {toast} from "react-toastify";
+import {NavLink} from "react-router";
 
 export const formSchema = z.object({
   name: z.string().min(4, {
@@ -104,7 +105,7 @@ export default function SignUpForm() {
       </CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-muted-foreground">
-          Have an account? <a href={"/sign-in"} className="text-primary hover:underline">Sign in</a>
+          Have an account? <NavLink to={"/sign-in"} className="text-primary hover:underline">Sign in</NavLink>
         </p>
       </CardFooter>
     </Card>
