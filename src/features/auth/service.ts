@@ -1,15 +1,32 @@
 import supabase from "@/lib/supabase.ts";
-import {SignInWithPasswordCredentials, SignUpWithPasswordCredentials} from "@supabase/supabase-js";
+import {SignInWithPasswordCredentials} from "@supabase/supabase-js";
+import * as z from "zod";
+import {formSchema as signUpFormSchema} from "@/features/auth/components/sign-up-form.tsx";
 
-export async function signUp(credentials: SignUpWithPasswordCredentials) {
-  const {data, error} = await supabase.auth.signUp(credentials);
+export async function signUp(credentials: z.infer<typeof signUpFormSchema>) {
+  const fullCredentials = {
+    email: credentials.email,
+    password: credentials.password,
+    options: {
+      data: {
+        name: credentials.name
+      }
+    }
+  }
+  const {data, error} = await supabase.auth.signUp(fullCredentials);
+  if(error) throw error;
 
-  if(error) return {data, error};
-
-  return await signIn(credentials);
-
+  return data;
 }
 
 export async function signIn(credentials: SignInWithPasswordCredentials) {
-  return await supabase.auth.signInWithPassword(credentials)
+  const {data, error} = await supabase.auth.signInWithPassword(credentials);
+  if (error) throw error;
+
+  return data;
+}
+
+export async function signOut() {
+  const {error} = await supabase.auth.signOut();
+  if(error) throw error;
 }

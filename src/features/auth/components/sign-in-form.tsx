@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import {NavLink} from "react-router";
 import {signIn} from "@/features/auth/service.ts";
+import {toast} from "react-toastify";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -35,7 +36,14 @@ export default function SignInForm() {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const {error, data} = await signIn(values)
+    try {
+      const data = await signIn(values)
+      console.log(data)
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
   }
 
   return (

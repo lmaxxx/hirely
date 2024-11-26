@@ -13,9 +13,11 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { signUp } from "@/features/auth/service.ts";
+import {signUp} from "@/features/auth/service.ts";
+import {AuthError} from "@supabase/supabase-js";
+import {toast} from "react-toastify";
 
-const formSchema = z.object({
+export const formSchema = z.object({
   name: z.string().min(4, {
     message: "Name must be at least 4 characters long.",
   }),
@@ -38,7 +40,14 @@ export default function SignUpForm() {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const {error, data} = await signUp(values)
+    try {
+      const data = await signUp(values)
+      console.log(data)
+    } catch (error) {
+      if (error instanceof AuthError) {
+        toast.error(error.message);
+      }
+    }
   }
 
   return (
