@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
+import { signUp } from "@/features/auth/service.ts";
 
 const formSchema = z.object({
   name: z.string().min(4, {
@@ -36,9 +37,8 @@ export default function SignUpForm() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // This is where you would typically handle form submission
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const {error, data} = await signUp(values)
   }
 
   return (
@@ -95,7 +95,7 @@ export default function SignUpForm() {
       </CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-muted-foreground">
-          Don't have an account? <a href="/sign-in" className="text-primary hover:underline">Sign in</a>
+          Have an account? <a href={"/sign-in"} className="text-primary hover:underline">Sign in</a>
         </p>
       </CardFooter>
     </Card>

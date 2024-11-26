@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import {NavLink} from "react-router";
+import {signIn} from "@/features/auth/service.ts";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -33,9 +34,8 @@ export default function SignInForm() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // This is where you would typically handle form submission
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const {error, data} = await signIn(values)
   }
 
   return (
@@ -79,7 +79,7 @@ export default function SignInForm() {
       </CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-muted-foreground">
-          Don't have an account? <NavLink to="/sign-up" className="text-primary hover:underline">Sign up</NavLink>
+          Don't have an account? <NavLink to={"/sign-up"} className="text-primary hover:underline">Sign up</NavLink>
         </p>
       </CardFooter>
     </Card>
