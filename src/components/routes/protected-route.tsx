@@ -13,12 +13,12 @@ export default function ProtectedRoute({publicOnly}: Props) {
   useEffect(() => {
     if (isLoading) return;
 
-    if (publicOnly && session) {
-      navigate("/");
-    } else if (!session) {
+    if (!session) {
       navigate("/sign-in");
+    } else if (publicOnly && session) {
+      navigate("/");
     }
-  }, [session, isLoading, publicOnly, navigate]);
+  }, [session, isLoading, publicOnly]);
 
   if (isLoading) {
     return (
