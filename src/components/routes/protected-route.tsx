@@ -16,7 +16,7 @@ export default function ProtectedRoute({publicOnly}: Props) {
     if (!session) {
       navigate("/sign-in");
     } else if (publicOnly && session) {
-      navigate("/");
+      navigate("/applications");
     }
   }, [session, isLoading, publicOnly]);
 
