@@ -1,9 +1,9 @@
 import {PlusCircle} from "lucide-react";
 import {Button} from "@/components/ui/button.tsx";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
-import {Select, SelectTrigger, SelectValue, SelectContent, SelectItem} from "@/components/ui/select.tsx"
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 
 const templates = [
   {id: 1, name: "Blog Post", category: "Content", lastModified: "2023-06-15"},
@@ -13,13 +13,13 @@ const templates = [
   {id: 5, name: "Social Media Post", category: "Marketing", lastModified: "2023-06-11"},
 ]
 
-export default function ApplicationsPage() {
-  const [selectedPage, setSelectedPage] = useState("applications");
+export default function CompaniesPage() {
+  const [selectedPage, setSelectedPage] = useState("companies");
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(selectedPage === "companies") {
-      navigate("/list/companies");
+    if(selectedPage === "applications") {
+      navigate("/list/applications");
     }
   }, [selectedPage]);
 
@@ -37,7 +37,7 @@ export default function ApplicationsPage() {
         </Select>
         <Button>
           <PlusCircle className="mr-2 h-4 w-4"/>
-          New Application
+          New Company
         </Button>
       </div>
 
