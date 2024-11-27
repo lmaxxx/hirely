@@ -46,7 +46,7 @@ export default function SignUpForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const data = await signUp(values);
+      await signUp(values);
     } catch (error) {
       if (error instanceof AuthError) {
         toast.error(error.message);

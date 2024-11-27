@@ -41,7 +41,7 @@ export default function SignInForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const data = await signIn(values);
+      await signIn(values);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
