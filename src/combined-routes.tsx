@@ -1,25 +1,23 @@
 import {Route, Routes} from "react-router";
-import authRoutes from "@/features/auth/routes";
-import landingRoutes from "@/features/landing/routes";
 import ProtectedRoute from "@/components/routes/protected-route.tsx";
-import ABC from "@/ABC.tsx";
 import {useSession} from "@/hooks/useSession.tsx";
-import applicationsRoutes from "@/features/applications/route.tsx";
+import SignInPage from "@/features/auth/pages/sign-in-page.tsx";
+import SignUpPage from "@/features/auth/pages/sign-up-page.tsx";
+import Landing from "@/landing.tsx";
+import ApplicationsPage from "@/features/applications/pages/applications-page.tsx";
 
 export default function CombinedRoutes() {
   const session = useSession();
 
-  console.log(session)
-
   return (
     <Routes>
+      <Route path={"/"} element={<Landing/>}></Route>
       <Route element={<ProtectedRoute publicOnly />}>
-        {authRoutes}
+        <Route path={"sign-in"} element={<SignInPage/>}></Route>
+        <Route path={"sign-up"} element={<SignUpPage/>}></Route>
       </Route>
-      {landingRoutes}
       <Route element={<ProtectedRoute/>}>
-        <Route path={"abc"} element={<ABC/>}/>
-        {applicationsRoutes}
+        <Route path={"/applications"} element={<ApplicationsPage/>}/>
       </Route>
     </Routes>
   )

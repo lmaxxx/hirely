@@ -2,7 +2,7 @@ import {NavLink} from "react-router";
 import {Button} from "@/components/ui/button.tsx";
 import {signOut} from "@/features/auth/service.ts";
 
-export default function LandingPage() {
+export default function Landing() {
 
   async function onClick() {
     await signOut();
