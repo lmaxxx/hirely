@@ -8,14 +8,17 @@ import {
 } from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import {PlusCircle} from "lucide-react";
+import {Loader2, PlusCircle} from "lucide-react";
 import * as z from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {useEffect, useState} from "react";
+import {createCompany} from "@/features/companies/service.ts";
+import {toast} from "react-toastify";
+import {useSession} from "@/hooks/useSession.tsx";
 
-const formSchema = z.object({
+export const formSchema = z.object({
   logo: z.instanceof(FileList).superRefine((files, ctx) => {
     if (!files.length) {
       ctx.addIssue({
@@ -55,9 +58,23 @@ export default function CreateCompanyFormDialog() {
   });
   const fileRef = form.register("logo");
   const [open, setOpen] = useState(false);
+  const {session} = useSession();
+  const [isLoading, setIsLoading] = useState(false);
+  form.watch("logo"); // force rerender after image selection
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    try {
+      setIsLoading(true);
+      await createCompany(values, session?.user.id);
+    } catch (error) {
+      if(error instanceof Error) {
+        toast.error(error.message);
+      }
+    } finally {
+      setIsLoading(false);
+      setOpen(false);
+    }
+
   }
 
   useEffect(() => {
@@ -127,7 +144,10 @@ export default function CreateCompanyFormDialog() {
               )}
             />
             <DialogFooter>
-              <Button type="submit">Create</Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading && <Loader2 className="animate-spin" />}
+                Sign In
+              </Button>
             </DialogFooter>
           </form>
         </Form>
