@@ -9,6 +9,8 @@ import {useSession} from "@/hooks/useSession.tsx";
 import {Company} from "@/entities.type.ts";
 import CompaniesListSkeleton from "@/features/companies/components/companies-list-skeleton.tsx";
 
+const COMPANIES_LIMIT = 10;
+
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState<Company[] | null>(null);
   const [selectedPage, setSelectedPage] = useState("companies");
@@ -52,7 +54,7 @@ export default function CompaniesPage() {
             <SelectItem value="companies">Your Companies</SelectItem>
           </SelectContent>
         </Select>
-        <CreateCompanyFormDialog onClose={fetchCompanies}/>
+        <CreateCompanyFormDialog disabled={(companies?.length ?? 0) >= COMPANIES_LIMIT} onClose={fetchCompanies}/>
       </div>
       {isLoading? <CompaniesListSkeleton/> : <CompaniesList companies={companies}/>}
     </main>

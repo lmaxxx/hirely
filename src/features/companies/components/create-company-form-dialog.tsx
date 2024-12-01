@@ -17,9 +17,11 @@ import {useEffect, useState} from "react";
 import {createCompany} from "@/features/companies/service.ts";
 import {toast} from "react-toastify";
 import {useSession} from "@/hooks/useSession.tsx";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 
 type Props = {
   onClose: () => void;
+  disabled: boolean;
 }
 
 export const formSchema = z.object({
@@ -52,7 +54,7 @@ export const formSchema = z.object({
   })
 });
 
-export default function CreateCompanyFormDialog({onClose} : Props) {
+export default function CreateCompanyFormDialog({onClose, disabled}: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -84,6 +86,26 @@ export default function CreateCompanyFormDialog({onClose} : Props) {
       onClose()
     }
   }, [open])
+
+  if (disabled) {
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span tabIndex={0}>
+              <Button disabled={true}>
+                <PlusCircle className="mr-2 h-4 w-4"/>
+                New Company
+              </Button>
+            </span>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>You can't create more than 10</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    )
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -147,7 +169,7 @@ export default function CreateCompanyFormDialog({onClose} : Props) {
             />
             <DialogFooter>
               <Button type="submit" disabled={isLoading}>
-                {isLoading && <Loader2 className="animate-spin" />}
+                {isLoading && <Loader2 className="animate-spin"/>}
                 Sign In
               </Button>
             </DialogFooter>
