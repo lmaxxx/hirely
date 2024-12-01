@@ -1,9 +1,9 @@
-import {PlusCircle} from "lucide-react";
 import {Button} from "@/components/ui/button.tsx";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
+import CreateCompanyFormDialog from "@/features/companies/components/create-company-form-dialog.tsx";
 
 const templates = [
   {id: 1, name: "Blog Post", category: "Content", lastModified: "2023-06-15"},
@@ -35,10 +35,7 @@ export default function CompaniesPage() {
             <SelectItem value="companies">Your Companies</SelectItem>
           </SelectContent>
         </Select>
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4"/>
-          New Company
-        </Button>
+        <CreateCompanyFormDialog/>
       </div>
 
       <div className="border rounded-lg overflow-hidden">
