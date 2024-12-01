@@ -39,3 +39,9 @@ export async function getAllCompanies(userId?: string) {
 
   return data;
 }
+
+//TODO also delete all applications that is linked with this company
+export async function deleteCompanyById(id: number) {
+  const {error} = await supabase.from("company").delete().eq("id", id);
+  if(error) throw error;
+}

@@ -2,12 +2,14 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/c
 import {Button} from "@/components/ui/button.tsx";
 import {Company} from "@/entities.type.ts";
 import {Frown} from "lucide-react";
+import DeleteCompanyDialog from "@/features/companies/components/delete-company-dialog.tsx";
 
 type Props = {
   companies: Company[] | null
+  onDelete: (id: number) => void
 }
 
-export default function CompaniesList({companies}: Props) {
+export default function CompaniesList({companies, onDelete}: Props) {
 
   if (!companies?.length) {
     return (
@@ -40,9 +42,7 @@ export default function CompaniesList({companies}: Props) {
                   <Button variant="ghost" size="sm">
                     Edit
                   </Button>
-                  <Button variant="ghost" size="sm" className="text-destructive">
-                    Delete
-                  </Button>
+                  <DeleteCompanyDialog onDelete={onDelete.bind(null, company.id)} companyName={company.name}/>
                 </TableCell>
               </TableRow>
             ))

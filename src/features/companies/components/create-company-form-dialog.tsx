@@ -72,6 +72,7 @@ export default function CreateCompanyFormDialog({onClose, disabled}: Props) {
     try {
       setIsLoading(true);
       await createCompany(values, session?.user.id);
+      onClose();
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -83,7 +84,6 @@ export default function CreateCompanyFormDialog({onClose, disabled}: Props) {
   useEffect(() => {
     if (!open) {
       form.reset()
-      onClose()
     }
   }, [open])
 
