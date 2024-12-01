@@ -1,27 +1,44 @@
-import {Button} from "@/components/ui/button.tsx";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import CreateCompanyFormDialog from "@/features/companies/components/create-company-form-dialog.tsx";
-
-const templates = [
-  {id: 1, name: "Blog Post", category: "Content", lastModified: "2023-06-15"},
-  {id: 2, name: "Newsletter", category: "Email", lastModified: "2023-06-14"},
-  {id: 3, name: "Landing Page", category: "Web", lastModified: "2023-06-13"},
-  {id: 4, name: "Product Description", category: "E-commerce", lastModified: "2023-06-12"},
-  {id: 5, name: "Social Media Post", category: "Marketing", lastModified: "2023-06-11"},
-]
+import CompaniesList from "@/features/companies/components/companies-list.tsx";
+import {getAllCompanies} from "@/features/companies/service.ts";
+import {toast} from "react-toastify";
+import {useSession} from "@/hooks/useSession.tsx";
+import {Company} from "@/entities.type.ts";
+import CompaniesListSkeleton from "@/features/companies/components/companies-list-skeleton.tsx";
 
 export default function CompaniesPage() {
+  const [companies, setCompanies] = useState<Company[] | null>(null);
   const [selectedPage, setSelectedPage] = useState("companies");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const {session} = useSession();
+
+  const fetchCompanies = async () => {
+    setIsLoading(true)
+
+    try {
+      const data = await getAllCompanies(session?.user.id);
+      setCompanies(data);
+      console.log(data)
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
     if(selectedPage === "applications") {
       navigate("/list/applications");
     }
   }, [selectedPage]);
+
+  useEffect(() => {
+    fetchCompanies();
+  }, []);
 
   return (
     <main className="container">
@@ -35,38 +52,9 @@ export default function CompaniesPage() {
             <SelectItem value="companies">Your Companies</SelectItem>
           </SelectContent>
         </Select>
-        <CreateCompanyFormDialog/>
+        <CreateCompanyFormDialog onClose={fetchCompanies}/>
       </div>
-
-      <div className="border rounded-lg overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Last Modified</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {templates.map((template) => (
-              <TableRow key={template.id}>
-                <TableCell className="font-medium">{template.name}</TableCell>
-                <TableCell>{template.category}</TableCell>
-                <TableCell>{template.lastModified}</TableCell>
-                <TableCell className="text-right">
-                  <Button variant="ghost" size="sm">
-                    Edit
-                  </Button>
-                  <Button variant="ghost" size="sm" className="text-destructive">
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      {isLoading? <CompaniesListSkeleton/> : <CompaniesList companies={companies} isLoading={isLoading}/>}
     </main>
   )
 }

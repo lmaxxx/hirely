@@ -43,9 +43,7 @@ export default function SignInForm() {
     try {
       await signIn(values);
     } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }

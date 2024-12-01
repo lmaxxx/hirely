@@ -14,7 +14,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import {signUp} from "@/features/auth/service.ts";
-import {AuthError} from "@supabase/supabase-js";
 import {toast} from "react-toastify";
 import {NavLink} from "react-router";
 import {useState} from "react";
@@ -48,9 +47,7 @@ export default function SignUpForm() {
     try {
       await signUp(values);
     } catch (error) {
-      if (error instanceof AuthError) {
-        toast.error(error.message);
-      }
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }

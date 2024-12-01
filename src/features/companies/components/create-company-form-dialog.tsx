@@ -18,6 +18,10 @@ import {createCompany} from "@/features/companies/service.ts";
 import {toast} from "react-toastify";
 import {useSession} from "@/hooks/useSession.tsx";
 
+type Props = {
+  onClose: () => void;
+}
+
 export const formSchema = z.object({
   logo: z.instanceof(FileList).superRefine((files, ctx) => {
     if (!files.length) {
@@ -48,7 +52,7 @@ export const formSchema = z.object({
   })
 });
 
-export default function CreateCompanyFormDialog() {
+export default function CreateCompanyFormDialog({onClose} : Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -67,19 +71,17 @@ export default function CreateCompanyFormDialog() {
       setIsLoading(true);
       await createCompany(values, session?.user.id);
     } catch (error) {
-      if(error instanceof Error) {
-        toast.error(error.message);
-      }
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
       setOpen(false);
     }
-
   }
 
   useEffect(() => {
     if (!open) {
       form.reset()
+      onClose()
     }
   }, [open])
 

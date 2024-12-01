@@ -9,20 +9,33 @@ export async function createCompany({logo, name}: z.infer<typeof formSchema>, us
   const file = logo[0]
 
   const path = `${uuid()}.${file.type.split("/").pop()}`;
-  const { error: uploadError} = await supabase.storage.from("logos")
+  const { error: uploadError} = await supabase.storage.from("logo")
     .upload(path, logo[0]);
   if(uploadError) throw uploadError;
 
   const { data: {publicUrl} } = supabase
     .storage
-    .from('logos')
+    .from('logo')
     .getPublicUrl(path);
 
-  const {error: insertionError} = await supabase.from("companies").insert({
+  const {error: insertionError} = await supabase.from("company").insert({
     name,
     logo: publicUrl,
     author: userId
   });
 
   if(insertionError) throw insertionError;
+}
+
+export async function getAllCompanies(userId?: string) {
+  if(!userId) throw new Error("Unauthorized user");
+
+  const {data, error} = await supabase.from("company")
+    .select("*")
+    .eq("author", userId)
+    .order("modified_at", {ascending: false})
+
+  if(error) throw error;
+
+  return data;
 }
