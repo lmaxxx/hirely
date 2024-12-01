@@ -54,7 +54,7 @@ export default function CompaniesPage() {
         </Select>
         <CreateCompanyFormDialog onClose={fetchCompanies}/>
       </div>
-      {isLoading? <CompaniesListSkeleton/> : <CompaniesList companies={companies} isLoading={isLoading}/>}
+      {isLoading? <CompaniesListSkeleton/> : <CompaniesList companies={companies}/>}
     </main>
   )
 }
