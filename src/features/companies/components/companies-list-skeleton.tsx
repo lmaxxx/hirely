@@ -16,68 +16,31 @@ export default function CompaniesListSkeleton() {
             <TableHead>
               <Skeleton className={"w-28 h-5"} />
             </TableHead>
-            <TableHead>
-              <Skeleton className={"w-24 h-5"} />
+            <TableHead className={"flex items-center justify-end"}>
+              <Skeleton className={"w-16 h-5"} />
             </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow >
-            <TableCell>
-              <Skeleton className={"w-32 h-5 my-1"} />
-            </TableCell>
-            <TableCell>
-              <Skeleton className={"w-5 h-5 my-1"} />
-            </TableCell>
-            <TableCell>
-              <Skeleton className={"w-40 h-5 my-1"} />
-            </TableCell>
-            <TableCell>
-              <Skeleton className={"w-12 h-5 my-1"}/>
-            </TableCell>
-          </TableRow>
-          <TableRow >
-            <TableCell>
-              <Skeleton className={"w-12 h-5 my-1"} />
-            </TableCell>
-            <TableCell>
-              <Skeleton className={"w-5 h-5 my-1"} />
-            </TableCell>
-            <TableCell>
-              <Skeleton className={"w-40 h-5 my-1"} />
-            </TableCell>
-            <TableCell>
-              <Skeleton className={"w-12 h-5 my-1"} />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>
-              <Skeleton className={"w-24 h-5 my-1"} />
-            </TableCell>
-            <TableCell>
-              <Skeleton className={"w-5 h-5 my-1"} />
-            </TableCell>
-            <TableCell>
-              <Skeleton className={"w-40 h-5 my-1"} />
-            </TableCell>
-            <TableCell>
-              <Skeleton className={"w-12 h-5 my-1"} />
-            </TableCell>
-          </TableRow>
-          <TableRow >
-            <TableCell>
-              <Skeleton className={"w-24 h-5 my-1"} />
-            </TableCell>
-            <TableCell>
-              <Skeleton className={"w-5 h-5 my-1"} />
-            </TableCell>
-            <TableCell>
-              <Skeleton className={"w-40 h-5 my-1"} />
-            </TableCell>
-            <TableCell>
-              <Skeleton className={"w-12 h-5 my-1"} />
-            </TableCell>
-          </TableRow>
+          {
+            Array.from({length: 4}).map(() => (
+              <TableRow >
+                <TableCell>
+                  <Skeleton className={"w-32 h-5 my-1"} />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className={"w-5 h-5 my-1"} />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className={"w-40 h-5 my-1"} />
+                </TableCell>
+                <TableHead className={"flex items-center justify-end"}>
+                  <Skeleton className={"w-12 h-5 mr-2"} />
+                  <Skeleton className={"w-12 h-5"} />
+                </TableHead>
+              </TableRow>
+            ))
+          }
         </TableBody>
       </Table>
     </div>

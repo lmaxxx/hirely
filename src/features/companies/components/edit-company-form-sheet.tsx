@@ -104,7 +104,7 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="sm">Edit</Button>
+        <Button className={"mr-2"} variant="ghost" size="sm">Edit</Button>
       </SheetTrigger>
       <SheetContent
         onInteractOutside={isLoading ? (e) => e.preventDefault() : (_) => {}} // preventing close sheet while isLoading

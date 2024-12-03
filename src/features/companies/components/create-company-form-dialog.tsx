@@ -49,9 +49,13 @@ export const formSchema = z.object({
       });
     }
   }),
-  name: z.string().min(4, {
-    message: "Name must be at least 4 characters long.",
-  })
+  name: z.string()
+    .min(4, {
+      message: "Name must be at least 4 characters long.",
+    })
+    .max(32, {
+      message: "Name must be at most 32 characters long.",
+    })
 });
 
 export default function CreateCompanyFormDialog({onClose, disabled}: Props) {

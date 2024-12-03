@@ -76,7 +76,7 @@ export default function CompaniesPage() {
         </Select>
         <CreateCompanyFormDialog disabled={(companies?.length ?? 0) >= COMPANIES_LIMIT} onClose={fetchCompanies}/>
       </div>
-      {isLoading? <CompaniesListSkeleton/> : <CompaniesList onUpdate={updateCompany} onDelete={deleteCompany} companies={companies}/>}
+      {isLoading ? <CompaniesListSkeleton/> : <CompaniesList onUpdate={updateCompany} onDelete={deleteCompany} companies={companies}/>}
     </main>
   )
 }
