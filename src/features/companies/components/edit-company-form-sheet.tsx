@@ -92,8 +92,6 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
     return company.name !== formValues.name || !!formValues.logo?.[0] || editor?.getHTML() !== company.description;
   }
 
-  console.log(form.getValues())
-
   useEffect(() => {
     if(!open) {
       form.setValue("name", company.name)
@@ -108,7 +106,11 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
       <SheetTrigger>
         <Button variant="ghost" size="sm">Edit</Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent
+        onInteractOutside={isLoading ? (e) => e.preventDefault() : (_) => {}} // preventing close sheet while isLoading
+        onEscapeKeyDown={isLoading ? (e) => e.preventDefault() : (_) => {}}
+        disabledCross={isLoading}
+      >
         <SheetHeader>
           <SheetTitle>Edit company</SheetTitle>
         </SheetHeader>

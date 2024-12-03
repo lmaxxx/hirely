@@ -107,15 +107,21 @@ export default function CreateCompanyFormDialog({onClose, disabled}: Props) {
     )
   }
 
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger asChild >
         <Button>
           <PlusCircle className="mr-2 h-4 w-4"/>
           New Company
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent
+        className="sm:max-w-[425px]"
+        onInteractOutside={isLoading ? (e) => e.preventDefault() : (_) => {}} // preventing close dialog while isLoading
+        onEscapeKeyDown={isLoading ? (e) => e.preventDefault() : (_) => {}}
+        disabledCross={isLoading}
+      >
         <DialogHeader>
           <DialogTitle>New Company</DialogTitle>
           <DialogDescription>
