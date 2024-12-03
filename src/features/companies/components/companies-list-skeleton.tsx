@@ -23,8 +23,8 @@ export default function CompaniesListSkeleton() {
         </TableHeader>
         <TableBody>
           {
-            Array.from({length: 4}).map(() => (
-              <TableRow >
+            Array.from({length: 4}).map((_, index) => (
+              <TableRow key={index}>
                 <TableCell>
                   <Skeleton className={"w-32 h-5 my-1"} />
                 </TableCell>

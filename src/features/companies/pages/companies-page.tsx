@@ -8,8 +8,7 @@ import {toast} from "react-toastify";
 import {useSession} from "@/hooks/useSession.tsx";
 import {Company} from "@/entities.type.ts";
 import CompaniesListSkeleton from "@/features/companies/components/companies-list-skeleton.tsx";
-
-const COMPANIES_LIMIT = 10;
+import {COMPANIES_LIMIT} from "&/env-variables.ts";
 
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState<Company[] | null>(null);
