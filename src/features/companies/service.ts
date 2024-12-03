@@ -58,7 +58,8 @@ export async function updateCompanyById(id: number, {name, logo}: z.infer<typeof
       .update({
         name,
         description,
-        logo: publicLogoUrl
+        logo: publicLogoUrl,
+        modified_at: new Date().toISOString(),
       })
       .eq("id", id)
       .select("*");
@@ -71,6 +72,7 @@ export async function updateCompanyById(id: number, {name, logo}: z.infer<typeof
     .update({
       name,
       description,
+      modified_at: new Date().toISOString(),
     })
     .eq("id", id)
     .select("*");

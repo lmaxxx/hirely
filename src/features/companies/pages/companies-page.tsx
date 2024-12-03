@@ -48,7 +48,7 @@ export default function CompaniesPage() {
       return copy.map(company => {
         if(company.id === updatedCompany.id) return updatedCompany;
         return company;
-      })
+      }).sort((a, b) => new Date(b.modified_at).getTime() - new Date(a.modified_at).getTime());
     });
   }
 
