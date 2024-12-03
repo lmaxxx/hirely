@@ -1,7 +1,6 @@
 import {
-  Sheet, SheetClose,
+  Sheet,
   SheetContent,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger
@@ -118,7 +117,7 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
             <img
               src={form.getValues("logo")?.[0] ? URL.createObjectURL(form.getValues("logo")?.[0]) : company.logo}
               alt="Selected image preview"
-              className="rounded object-cover object-center w-24 h-24"
+              className="rounded object-cover object-center w-24 h-24 border"
             />
             <FormField
               control={form.control}

@@ -59,7 +59,7 @@ export default function CreateCompanyFormDialog({onClose, disabled}: Props) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      logo: undefined
+      logo: new DataTransfer().files,
     }
   });
   const fileRef = form.register("logo");
@@ -129,9 +129,8 @@ export default function CreateCompanyFormDialog({onClose, disabled}: Props) {
               <img
                 src={URL.createObjectURL(form.getValues("logo")[0])}
                 alt="Selected image preview"
-                className="rounded object-cover object-center w-24 h-24"
+                className="rounded object-cover object-center w-24 h-24 border"
               />
-
             )}
             <FormField
               control={form.control}
@@ -170,7 +169,7 @@ export default function CreateCompanyFormDialog({onClose, disabled}: Props) {
             <DialogFooter>
               <Button type="submit" disabled={isLoading}>
                 {isLoading && <Loader2 className="animate-spin"/>}
-                Sign In
+                Create
               </Button>
             </DialogFooter>
           </form>
