@@ -44,38 +44,55 @@ export async function getAllCompanies(userId?: string) {
   return data;
 }
 
-//TODO also delete all applications that is linked with this company and logo
+//TODO also delete all applications that is linked with this company
 export async function deleteCompanyById(id: number) {
-  const {error} = await supabase.from("company").delete().eq("id", id);
-  if(error) throw error;
+  const {error: deleteCompanyError, data} = await supabase.from("company").delete().eq("id", id).select("*");
+  if(deleteCompanyError || !data) throw deleteCompanyError;
+
+  const fileName = data[0].logo.split("/").pop();
+  await deleteLogo(fileName);
 }
 
-//TODO delete previous logo from bucket
-export async function updateCompanyById(id: number, {name, logo}: z.infer<typeof editSchema>, description: string) {
-  if(logo.length) {
-    const publicLogoUrl = await uploadLogoAndGetUrl(logo[0]);
-    const {error, data} = await supabase.from("company")
-      .update({
-        name,
-        description,
-        logo: publicLogoUrl,
-        modified_at: new Date().toISOString(),
-      })
-      .eq("id", id)
-      .select("*");
+export async function updateCompanyById(id: number, values: z.infer<typeof editSchema>, description: string) {
+  const newData: {
+    name: string;
+    description: string;
+    modified_at: string;
+    logo?: string;
+  } = {
+    name: values.name,
+    description,
+    modified_at: new Date().toISOString(),
+    logo: '',
+  };
 
-    if(error) throw error;
-    return data;
+  if(values.logo.length) {
+    const {error: logoError, data: logos} = await supabase.from("company").select("logo").eq("id", id);
+    if(logoError || !logos) throw logoError;
+
+    const newLogo = values.logo[0];
+    newData.logo = await uploadLogoAndGetUrl(newLogo);
+
+    const oldLogo = logos[0].logo.split("/").pop();
+    await deleteLogo(oldLogo);
+  } else {
+    delete newData.logo;
   }
 
   const {error, data} = await supabase.from("company")
-    .update({
-      name,
-      description,
-      modified_at: new Date().toISOString(),
-    })
+    .update(newData)
     .eq("id", id)
     .select("*");
   if(error) throw error;
   return data;
+}
+
+async function deleteLogo(fileName: string | undefined) {
+  if(fileName) {
+    const { error: deleteLogoError } = await supabase
+      .storage
+      .from('logo')
+      .remove([fileName])
+    if(deleteLogoError) throw deleteLogoError;
+  }
 }
