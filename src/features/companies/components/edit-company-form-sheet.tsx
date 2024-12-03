@@ -19,30 +19,7 @@ import {toast} from "react-toastify";
 import {useEffect, useState} from "react";
 import {updateCompanyById} from "@/features/companies/service.ts";
 import {Loader2} from "lucide-react";
-
-export const formSchema = z.object({
-  logo: z.instanceof(FileList).superRefine((files, ctx) => {
-    if(!files.length) return z.NEVER;
-
-    if (!files[0].type.startsWith("image/")) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "You must provide an image.",
-      });
-      return z.NEVER;
-    }
-
-    if (files[0].size >= 1024 * 1024) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Image is too large."
-      });
-    }
-  }),
-  name: z.string().min(4, {
-    message: "Name must be at least 4 characters long.",
-  }),
-});
+import {editFormSchema} from "@/features/companies/form-validation.ts";
 
 type Props = {
   company: Company;
@@ -54,8 +31,8 @@ const extensions = [StarterKit]
 export default function EditCompanyFormSheet({company, onUpdate}: Props) {
   const [isLoading, setIsLoading] = useState(false)
   const [open, setOpen] = useState(false);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof editFormSchema>>({
+    resolver: zodResolver(editFormSchema),
     defaultValues: {
       name: company.name,
       logo: new DataTransfer().files,
@@ -68,7 +45,7 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
     content: company.description ?? ""
   })
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof editFormSchema>) => {
     try {
       setIsLoading(true);
       const updatedCompany = (await updateCompanyById(company.id, values, editor?.getHTML() ?? "<p></p>"))[0];

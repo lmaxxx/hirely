@@ -18,49 +18,16 @@ import {createCompany} from "@/features/companies/service.ts";
 import {toast} from "react-toastify";
 import {useSession} from "@/hooks/useSession.tsx";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
+import {createFormSchema} from "@/features/companies/form-validation.ts";
 
 type Props = {
   onClose: () => void;
   disabled: boolean;
 }
 
-export const formSchema = z.object({
-  logo: z.instanceof(FileList).superRefine((files, ctx) => {
-    if (!files.length) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Provide the logo.",
-      });
-      return z.NEVER;
-    }
-
-    if (!files[0].type.startsWith("image/")) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "You must provide an image.",
-      });
-      return z.NEVER;
-    }
-
-    if (files[0].size >= 1024 * 1024) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Image is too large."
-      });
-    }
-  }),
-  name: z.string()
-    .min(4, {
-      message: "Name must be at least 4 characters long.",
-    })
-    .max(32, {
-      message: "Name must be at most 32 characters long.",
-    })
-});
-
 export default function CreateCompanyFormDialog({onClose, disabled}: Props) {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof createFormSchema>>({
+    resolver: zodResolver(createFormSchema),
     defaultValues: {
       name: "",
       logo: new DataTransfer().files,
@@ -72,7 +39,7 @@ export default function CreateCompanyFormDialog({onClose, disabled}: Props) {
   const [isLoading, setIsLoading] = useState(false);
   form.watch("logo"); // force rerender after image selection
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof createFormSchema>) => {
     try {
       setIsLoading(true);
       await createCompany(values, session?.user.id);
