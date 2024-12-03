@@ -1,16 +1,13 @@
-import {formSchema} from "@/features/companies/components/create-company-form-dialog.tsx";
+import {formSchema as createSchema} from "@/features/companies/components/create-company-form-dialog.tsx";
 import {z} from "zod";
 import supabase from "@/lib/supabase.ts";
 import {uuid} from "@supabase/supabase-js/dist/module/lib/helpers";
+import {formSchema as editSchema} from "@/features/companies/components/edit-company-form-sheet.tsx";
 
-export async function createCompany({logo, name}: z.infer<typeof formSchema>, userId?: string) {
-  if(!userId) throw new Error("Unauthorized user");
-
-  const file = logo[0]
-
+async function uploadLogoAndGetUrl(file: File) {
   const path = `${uuid()}.${file.type.split("/").pop()}`;
   const { error: uploadError} = await supabase.storage.from("logo")
-    .upload(path, logo[0]);
+    .upload(path, file);
   if(uploadError) throw uploadError;
 
   const { data: {publicUrl} } = supabase
@@ -18,9 +15,16 @@ export async function createCompany({logo, name}: z.infer<typeof formSchema>, us
     .from('logo')
     .getPublicUrl(path);
 
+  return publicUrl;
+}
+
+export async function createCompany({logo, name}: z.infer<typeof createSchema>, userId?: string) {
+  if(!userId) throw new Error("Unauthorized user");
+  const file = logo[0]
+  const logoPublicUrl = await uploadLogoAndGetUrl(file)
   const {error: insertionError} = await supabase.from("company").insert({
     name,
-    logo: publicUrl,
+    logo: logoPublicUrl,
     author: userId
   });
 
@@ -40,8 +44,36 @@ export async function getAllCompanies(userId?: string) {
   return data;
 }
 
-//TODO also delete all applications that is linked with this company
+//TODO also delete all applications that is linked with this company and logo
 export async function deleteCompanyById(id: number) {
   const {error} = await supabase.from("company").delete().eq("id", id);
   if(error) throw error;
+}
+
+//TODO delete previous logo from bucket
+export async function updateCompanyById(id: number, {name, logo}: z.infer<typeof editSchema>, description: string) {
+  if(logo.length) {
+    const publicLogoUrl = await uploadLogoAndGetUrl(logo[0]);
+    const {error, data} = await supabase.from("company")
+      .update({
+        name,
+        description,
+        logo: publicLogoUrl
+      })
+      .eq("id", id)
+      .select("*");
+
+    if(error) throw error;
+    return data;
+  }
+
+  const {error, data} = await supabase.from("company")
+    .update({
+      name,
+      description,
+    })
+    .eq("id", id)
+    .select("*");
+  if(error) throw error;
+  return data;
 }

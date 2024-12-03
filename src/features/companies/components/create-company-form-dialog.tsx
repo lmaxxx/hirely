@@ -140,7 +140,7 @@ export default function CreateCompanyFormDialog({onClose, disabled}: Props) {
                 <FormItem>
                   <FormLabel>
                     <Button variant={"secondary"} asChild>
-                      <span>Upload logo</span>
+                      <span className={"cursor-pointer"}>Upload logo</span>
                     </Button>
                   </FormLabel>
                   <FormControl>

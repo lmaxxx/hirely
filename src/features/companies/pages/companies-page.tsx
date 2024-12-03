@@ -3,7 +3,7 @@ import {useNavigate} from "react-router";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import CreateCompanyFormDialog from "@/features/companies/components/create-company-form-dialog.tsx";
 import CompaniesList from "@/features/companies/components/companies-list.tsx";
-import {deleteCompany, deleteCompanyById, getAllCompanies} from "@/features/companies/service.ts";
+import {deleteCompanyById, getAllCompanies} from "@/features/companies/service.ts";
 import {toast} from "react-toastify";
 import {useSession} from "@/hooks/useSession.tsx";
 import {Company} from "@/entities.type.ts";
@@ -23,7 +23,6 @@ export default function CompaniesPage() {
     try {
       const data = await getAllCompanies(session?.user.id);
       setCompanies(data);
-      console.log(data)
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -41,6 +40,16 @@ export default function CompaniesPage() {
       }
     )
     fetchCompanies();
+  }
+
+  const updateCompany = (updatedCompany: Company) => {
+    setCompanies(oldCompanies => {
+      const copy = [...oldCompanies!];
+      return copy.map(company => {
+        if(company.id === updatedCompany.id) return updatedCompany;
+        return company;
+      })
+    });
   }
 
   useEffect(() => {
@@ -67,7 +76,7 @@ export default function CompaniesPage() {
         </Select>
         <CreateCompanyFormDialog disabled={(companies?.length ?? 0) >= COMPANIES_LIMIT} onClose={fetchCompanies}/>
       </div>
-      {isLoading? <CompaniesListSkeleton/> : <CompaniesList onDelete={deleteCompany} companies={companies}/>}
+      {isLoading? <CompaniesListSkeleton/> : <CompaniesList onUpdate={updateCompany} onDelete={deleteCompany} companies={companies}/>}
     </main>
   )
 }

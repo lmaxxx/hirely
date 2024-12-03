@@ -1,15 +1,16 @@
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
-import {Button} from "@/components/ui/button.tsx";
 import {Company} from "@/entities.type.ts";
 import {Frown} from "lucide-react";
 import DeleteCompanyDialog from "@/features/companies/components/delete-company-dialog.tsx";
+import EditCompanyFormSheet from "@/features/companies/components/edit-company-form-sheet.tsx";
 
 type Props = {
-  companies: Company[] | null
-  onDelete: (id: number) => void
+  companies: Company[] | null;
+  onDelete: (id: number) => void;
+  onUpdate: (company: Company) => void;
 }
 
-export default function CompaniesList({companies, onDelete}: Props) {
+export default function CompaniesList({companies, onDelete, onUpdate}: Props) {
 
   if (!companies?.length) {
     return (
@@ -39,9 +40,7 @@ export default function CompaniesList({companies, onDelete}: Props) {
                 <TableCell>0</TableCell>
                 <TableCell>{new Date(company.modified_at).toLocaleString()}</TableCell>
                 <TableCell className="text-right">
-                  <Button variant="ghost" size="sm">
-                    Edit
-                  </Button>
+                  <EditCompanyFormSheet onUpdate={onUpdate} company={company}/>
                   <DeleteCompanyDialog onDelete={onDelete.bind(null, company.id)} companyName={company.name}/>
                 </TableCell>
               </TableRow>

@@ -76,3 +76,49 @@
     @apply bg-background text-foreground;
     }
 }
+
+.editor-container {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 12px;
+    background: #fafafa;
+    max-width: 600px;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+}
+
+/* Default paragraph styling */
+.editor-container p {
+    margin: 8px 0;
+    line-height: 1.5;
+    color: #333;
+}
+
+/* Style bold text */
+.editor-container strong {
+    font-weight: bold;
+    color: #000;
+}
+
+/* Style headings */
+.editor-container h1 {
+    font-size: 1.8rem;
+    color: #222;
+    margin: 12px 0;
+}
+
+.editor-container h2 {
+    font-size: 1.5rem;
+    color: #444;
+    margin: 10px 0;
+}
+
+/* Style links */
+.editor-container a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.editor-container a:hover {
+    text-decoration: underline;
+}
