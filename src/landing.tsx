@@ -4,7 +4,7 @@ import {signOut} from "@/features/auth/service.ts";
 
 export default function Landing() {
 
-  async function onClick() {
+  const onClick = async () => {
     await signOut();
   }
 

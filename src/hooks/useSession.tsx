@@ -15,7 +15,7 @@ export function SessionProvider({children}: {children: ReactNode}) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchSession() {
+    const fetchSession = async () => {
       const {data: {session}} = await supabase.auth.getSession()
       setSession(session)
       setIsLoading(false)

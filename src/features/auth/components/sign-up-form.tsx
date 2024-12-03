@@ -42,7 +42,7 @@ export default function SignUpForm() {
     },
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
       await signUp(values);
