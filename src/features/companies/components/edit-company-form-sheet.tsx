@@ -1,6 +1,6 @@
 import {
   Sheet,
-  SheetContent,
+  SheetContent, SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger
@@ -103,7 +103,7 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger>
+      <SheetTrigger asChild>
         <Button variant="ghost" size="sm">Edit</Button>
       </SheetTrigger>
       <SheetContent
@@ -114,6 +114,7 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
         <SheetHeader>
           <SheetTitle>Edit company</SheetTitle>
         </SheetHeader>
+        <SheetDescription/>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-4 mt-4"}>
             <img
