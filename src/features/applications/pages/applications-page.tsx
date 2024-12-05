@@ -1,9 +1,9 @@
-import {PlusCircle} from "lucide-react";
 import {Button} from "@/components/ui/button.tsx";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
 import {Select, SelectTrigger, SelectValue, SelectContent, SelectItem} from "@/components/ui/select.tsx"
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
+import CreateCompanyFormDialog from "@/features/applications/components/create-application-dialog.tsx";
 
 const templates = [
   {id: 1, name: "Blog Post", category: "Content", lastModified: "2023-06-15"},
@@ -35,10 +35,7 @@ export default function ApplicationsPage() {
             <SelectItem value="companies">Your Companies</SelectItem>
           </SelectContent>
         </Select>
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4"/>
-          New Application
-        </Button>
+        <CreateCompanyFormDialog/>
       </div>
 
       <div className="border rounded-lg overflow-hidden">
