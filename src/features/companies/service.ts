@@ -56,13 +56,10 @@ export async function updateCompanyById(id: number, values: z.infer<typeof editF
   const newData: {
     name: string;
     description: string;
-    modified_at: string;
     logo?: string;
   } = {
     name: values.name,
     description,
-    modified_at: new Date().toISOString(),
-    logo: '',
   };
 
   if(values.logo.length) {
@@ -74,8 +71,6 @@ export async function updateCompanyById(id: number, values: z.infer<typeof editF
 
     const oldLogo = logos[0].logo.split("/").pop();
     await deleteLogo(oldLogo);
-  } else {
-    delete newData.logo;
   }
 
   const {error, data} = await supabase.from("company")
