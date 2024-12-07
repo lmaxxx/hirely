@@ -8,25 +8,26 @@ import {
 } from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import {Loader2, PlusCircle} from "lucide-react";
+import {Loader2} from "lucide-react";
 import * as z from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
-import {useEffect, useState} from "react";
-import {createCompany} from "@/features/companies/service.ts";
+import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form.tsx";
+import {ReactNode, useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {useSession} from "@/hooks/useSession.tsx";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 import {createFormSchema} from "@/features/applications/form-validation.ts";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
+import {Company} from "@/entities.type.ts";
+import {createApplication} from "@/features/applications/service.ts";
 
 type Props = {
-  // onClose: () => void;
-  // disabled: boolean;
+  onClose: () => void;
+  companies: Company[]
+  children: ReactNode;
 }
 
-export default function CreateCompanyFormDialog({onClose, disabled}: Props) {
+export default function CreateCompanyFormDialog({onClose, companies, children}: Props) {
   const form = useForm<z.infer<typeof createFormSchema>>({
     resolver: zodResolver(createFormSchema),
     defaultValues: {
@@ -39,17 +40,16 @@ export default function CreateCompanyFormDialog({onClose, disabled}: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (values: z.infer<typeof createFormSchema>) => {
-    console.log(values)
-    // try {
-    //   setIsLoading(true);
-    //   await createCompany(values, session?.user.id);
-    //   onClose();
-    // } catch (error) {
-    //   toast.error(error.message);
-    // } finally {
-    //   setIsLoading(false);
-    //   setOpen(false);
-    // }
+    try {
+      setIsLoading(true);
+      await createApplication(values, session?.user.id);
+      onClose();
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+      setOpen(false);
+    }
   }
 
   useEffect(() => {
@@ -58,33 +58,10 @@ export default function CreateCompanyFormDialog({onClose, disabled}: Props) {
     }
   }, [open])
 
-  if (disabled) {
-    return (
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <span tabIndex={0}>
-              <Button disabled={true}>
-                <PlusCircle className="mr-2 h-4 w-4"/>
-                New Company
-              </Button>
-            </span>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>You can't create more than 10</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    )
-  }
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild >
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4"/>
-          New Application
-        </Button>
+      <DialogTrigger>
+        {children}
       </DialogTrigger>
       <DialogContent
         className="sm:max-w-[425px]"
@@ -123,9 +100,11 @@ export default function CreateCompanyFormDialog({onClose, disabled}: Props) {
                         <SelectValue placeholder="Select company" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="1234">Google</SelectItem>
-                        <SelectItem value="12345">Facebook</SelectItem>
-                        <SelectItem value="123456">Meta</SelectItem>
+                        {
+                          companies.map(company => (
+                            <SelectItem key={company.id} value={company.id.toString()}>{company.name}</SelectItem>
+                          ))
+                        }
                       </SelectContent>
                     </Select>
                   </FormControl>

@@ -1,27 +1,56 @@
 import {Button} from "@/components/ui/button.tsx";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
 import {Select, SelectTrigger, SelectValue, SelectContent, SelectItem} from "@/components/ui/select.tsx"
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import CreateCompanyFormDialog from "@/features/applications/components/create-application-dialog.tsx";
-
-const templates = [
-  {id: 1, name: "Blog Post", category: "Content", lastModified: "2023-06-15"},
-  {id: 2, name: "Newsletter", category: "Email", lastModified: "2023-06-14"},
-  {id: 3, name: "Landing Page", category: "Web", lastModified: "2023-06-13"},
-  {id: 4, name: "Product Description", category: "E-commerce", lastModified: "2023-06-12"},
-  {id: 5, name: "Social Media Post", category: "Marketing", lastModified: "2023-06-11"},
-]
+import {getAllCompanies} from "@/features/companies/service.ts";
+import {toast} from "react-toastify";
+import {Application, Company} from "@/entities.type.ts";
+import {useSession} from "@/hooks/useSession.tsx";
+import {Loader2, PlusCircle} from "lucide-react";
+import {getAllApplications} from "@/features/applications/service.ts";
+import CompaniesListSkeleton from "@/features/companies/components/companies-list-skeleton.tsx";
+import ApplicationsList from "@/features/applications/components/applications-list.tsx";
 
 export default function ApplicationsPage() {
   const [selectedPage, setSelectedPage] = useState("applications");
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const {session} = useSession();
   const navigate = useNavigate();
+
+  const fetchData = async () => {
+    setIsLoading(true)
+    try {
+      await fetchCompanies();
+      await fetchApplications();
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const fetchCompanies = async () => {
+    const fetchedCompanies = await getAllCompanies(session?.user.id);
+    setCompanies(fetchedCompanies);
+  }
+
+  const fetchApplications = async () => {
+    const fetchedApplications = await getAllApplications(session?.user.id);
+    setApplications(fetchedApplications);
+  }
 
   useEffect(() => {
     if(selectedPage === "companies") {
       navigate("/list/companies");
     }
   }, [selectedPage]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <main className="container">
@@ -35,38 +64,14 @@ export default function ApplicationsPage() {
             <SelectItem value="companies">Your Companies</SelectItem>
           </SelectContent>
         </Select>
-        <CreateCompanyFormDialog/>
+        <CreateCompanyFormDialog companies={companies} onClose={fetchApplications}>
+          <Button disabled={isLoading}>
+            {isLoading ? <Loader2 className="animate-spin mr-2 h-4 w-4"/> : <PlusCircle className="mr-2 h-4 w-4"/>}
+            New Application
+          </Button>
+        </CreateCompanyFormDialog>
       </div>
-
-      <div className="border rounded-lg overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Last Modified</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {templates.map((template) => (
-              <TableRow key={template.id}>
-                <TableCell className="font-medium">{template.name}</TableCell>
-                <TableCell>{template.category}</TableCell>
-                <TableCell>{template.lastModified}</TableCell>
-                <TableCell className="text-right">
-                  <Button variant="ghost" size="sm">
-                    Edit
-                  </Button>
-                  <Button variant="ghost" size="sm" className="text-destructive">
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      {isLoading ? <CompaniesListSkeleton/> : <ApplicationsList applications={applications}/>}
     </main>
   )
 }

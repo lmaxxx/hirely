@@ -11,7 +11,7 @@ import CompaniesListSkeleton from "@/features/companies/components/companies-lis
 import {COMPANIES_LIMIT} from "&/env-variables.ts";
 
 export default function CompaniesPage() {
-  const [companies, setCompanies] = useState<Company[] | null>(null);
+  const [companies, setCompanies] = useState<Company[]>([]);
   const [selectedPage, setSelectedPage] = useState("companies");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +38,7 @@ export default function CompaniesPage() {
         error: "Failed to delete. Try again.",
       }
     )
-    fetchCompanies();
+    await fetchCompanies();
   }
 
   const updateCompany = (updatedCompany: Company) => {
@@ -73,7 +73,7 @@ export default function CompaniesPage() {
             <SelectItem value="companies">Your Companies</SelectItem>
           </SelectContent>
         </Select>
-        <CreateCompanyFormDialog disabled={(companies?.length ?? 0) >= COMPANIES_LIMIT} onClose={fetchCompanies}/>
+        <CreateCompanyFormDialog disabled={(companies.length ?? 0) >= COMPANIES_LIMIT} onClose={fetchCompanies}/>
       </div>
       {isLoading ? <CompaniesListSkeleton/> : <CompaniesList onUpdate={updateCompany} onDelete={deleteCompany} companies={companies}/>}
     </main>

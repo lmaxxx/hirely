@@ -9,11 +9,49 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      application: {
+        Row: {
+          author: string
+          company: number
+          created_at: string
+          description: string
+          id: number
+          modified_at: string
+          position: string
+        }
+        Insert: {
+          author: string
+          company: number
+          created_at?: string
+          description?: string
+          id?: number
+          modified_at?: string
+          position?: string
+        }
+        Update: {
+          author?: string
+          company?: number
+          created_at?: string
+          description?: string
+          id?: number
+          modified_at?: string
+          position?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "application_company_fkey"
+            columns: ["company"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       company: {
         Row: {
           author: string
           created_at: string
-          description: string | null
+          description: string
           id: number
           logo: string
           modified_at: string
@@ -22,7 +60,7 @@ export type Database = {
         Insert: {
           author: string
           created_at?: string
-          description?: string | null
+          description?: string
           id?: number
           logo?: string
           modified_at?: string
@@ -31,7 +69,7 @@ export type Database = {
         Update: {
           author?: string
           created_at?: string
-          description?: string | null
+          description?: string
           id?: number
           logo?: string
           modified_at?: string
@@ -47,14 +85,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      continents:
-        | "Africa"
-        | "Antarctica"
-        | "Asia"
-        | "Europe"
-        | "Oceania"
-        | "North America"
-        | "South America"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
