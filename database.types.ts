@@ -18,6 +18,7 @@ export type Database = {
           id: number
           modified_at: string
           position: string
+          published_at: string | null
         }
         Insert: {
           author: string
@@ -27,6 +28,7 @@ export type Database = {
           id?: number
           modified_at?: string
           position?: string
+          published_at?: string | null
         }
         Update: {
           author?: string
@@ -36,6 +38,7 @@ export type Database = {
           id?: number
           modified_at?: string
           position?: string
+          published_at?: string | null
         }
         Relationships: [
           {

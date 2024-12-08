@@ -4,10 +4,10 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {getAllCompanies} from "@/features/companies/service.ts";
 import {toast} from "react-toastify";
-import {Application, Company} from "@/entities.type.ts";
+import {JoinedApplicationCompany, Company} from "@/entities.type.ts";
 import {useSession} from "@/hooks/useSession.tsx";
 import {Loader2, PlusCircle} from "lucide-react";
-import {getAllApplications} from "@/features/applications/service.ts";
+import {getAllApplicationsWithCompanyName} from "@/features/applications/service.ts";
 import ApplicationsList from "@/features/applications/components/applications-list.tsx";
 import {APPLICATIONS_LIMIT} from "&/env-variables.ts";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
@@ -17,7 +17,7 @@ import ApplicationsListSkeleton from "@/features/applications/components/applica
 export default function ApplicationsPage() {
   const [selectedPage, setSelectedPage] = useState("applications");
   const [companies, setCompanies] = useState<Company[]>([]);
-  const [applications, setApplications] = useState<Application[]>([]);
+  const [applications, setApplications] = useState<JoinedApplicationCompany[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const {session} = useSession();
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ export default function ApplicationsPage() {
   }
 
   const fetchApplications = async () => {
-    const fetchedApplications = await getAllApplications(session?.user.id);
+    const fetchedApplications = await getAllApplicationsWithCompanyName(session?.user.id);
     setApplications(fetchedApplications);
   }
 

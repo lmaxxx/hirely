@@ -1,10 +1,10 @@
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
-import {Application} from "@/entities.type.ts";
+import {JoinedApplicationCompany} from "@/entities.type.ts";
 import {Frown} from "lucide-react";
 import {Badge} from "@/components/ui/badge.tsx";
 
 type Props = {
-  applications: Application[];
+  applications: JoinedApplicationCompany[];
 }
 
 export default function ApplicationsList({applications}: Props) {
@@ -35,7 +35,7 @@ export default function ApplicationsList({applications}: Props) {
               <TableRow key={application.id} className={"h-12 cursor-pointer"}>
                 <TableCell className="font-medium">{application.position}</TableCell>
                 <TableCell>0</TableCell>
-                <TableCell>{"Google"}</TableCell>
+                <TableCell>{application.company.name ?? "ERROR"}</TableCell>
                 <TableCell>
                   <Badge className={"bg-red-500 hover:bg-red-600"}>Not published</Badge>
                 </TableCell>

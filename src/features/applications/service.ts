@@ -13,11 +13,11 @@ export async function createApplication({position, company}: z.infer<typeof crea
   if(error) throw error;
 }
 
-export async function getAllApplications(userId?: string) {
+export async function getAllApplicationsWithCompanyName(userId?: string) {
   if(!userId) throw new Error("Unauthorized user");
 
   const {data, error} = await supabase.from("application")
-    .select("*")
+    .select("*, company (name)")
     .eq("author", userId)
     .order("modified_at", {ascending: false})
 
