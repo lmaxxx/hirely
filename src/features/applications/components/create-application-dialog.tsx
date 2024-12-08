@@ -27,7 +27,7 @@ type Props = {
   children: ReactNode;
 }
 
-export default function CreateCompanyFormDialog({onClose, companies, children}: Props) {
+export default function CreateApplicationFormDialog({onClose, companies, children}: Props) {
   const form = useForm<z.infer<typeof createFormSchema>>({
     resolver: zodResolver(createFormSchema),
     defaultValues: {

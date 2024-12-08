@@ -77,7 +77,7 @@ export default function CompaniesPage() {
             </span>
           </TooltipTrigger>
           <TooltipContent>
-            <p>You can't create more than {COMPANIES_LIMIT}</p>
+            <p>You can't create more than {COMPANIES_LIMIT} companies</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
