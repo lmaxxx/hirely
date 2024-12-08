@@ -9,6 +9,9 @@ import {useSession} from "@/hooks/useSession.tsx";
 import {Company} from "@/entities.type.ts";
 import CompaniesListSkeleton from "@/features/companies/components/companies-list-skeleton.tsx";
 import {COMPANIES_LIMIT} from "&/env-variables.ts";
+import {Button} from "@/components/ui/button.tsx";
+import {PlusCircle} from "lucide-react";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -61,6 +64,34 @@ export default function CompaniesPage() {
     fetchCompanies();
   }, []);
 
+  const dialogButton = (
+    (companies.length ?? 0) >= COMPANIES_LIMIT ?
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span tabIndex={0}>
+              <Button disabled={true}>
+                <PlusCircle className="mr-2 h-4 w-4"/>
+                New Company
+              </Button>
+            </span>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>You can't create more than {COMPANIES_LIMIT}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      :
+      <CreateCompanyFormDialog
+        onClose={fetchCompanies}
+      >
+        <Button>
+          <PlusCircle className="mr-2 h-4 w-4"/>
+          New Company
+        </Button>
+      </CreateCompanyFormDialog>
+  )
+
   return (
     <main className="container">
       <div className="flex justify-between items-center mb-6">
@@ -73,7 +104,7 @@ export default function CompaniesPage() {
             <SelectItem value="companies">Your Companies</SelectItem>
           </SelectContent>
         </Select>
-        <CreateCompanyFormDialog disabled={(companies.length ?? 0) >= COMPANIES_LIMIT} onClose={fetchCompanies}/>
+        {dialogButton}
       </div>
       {isLoading ? <CompaniesListSkeleton/> : <CompaniesList onUpdate={updateCompany} onDelete={deleteCompany} companies={companies}/>}
     </main>
