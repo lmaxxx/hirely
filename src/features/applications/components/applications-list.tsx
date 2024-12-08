@@ -1,14 +1,10 @@
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
-import {Application, Company} from "@/entities.type.ts";
+import {Application} from "@/entities.type.ts";
 import {Frown} from "lucide-react";
-import DeleteCompanyDialog from "@/features/companies/components/delete-company-dialog.tsx";
-import EditCompanyFormSheet from "@/features/companies/components/edit-company-form-sheet.tsx";
 import {Badge} from "@/components/ui/badge.tsx";
 
 type Props = {
   applications: Application[];
-  // onDelete: (id: number) => void;
-  // onUpdate: (company: Company) => void;
 }
 
 export default function ApplicationsList({applications}: Props) {

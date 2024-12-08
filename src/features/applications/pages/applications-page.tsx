@@ -8,11 +8,11 @@ import {Application, Company} from "@/entities.type.ts";
 import {useSession} from "@/hooks/useSession.tsx";
 import {Loader2, PlusCircle} from "lucide-react";
 import {getAllApplications} from "@/features/applications/service.ts";
-import CompaniesListSkeleton from "@/features/companies/components/companies-list-skeleton.tsx";
 import ApplicationsList from "@/features/applications/components/applications-list.tsx";
 import {APPLICATIONS_LIMIT} from "&/env-variables.ts";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 import CreateApplicationFormDialog from "@/features/applications/components/create-application-dialog.tsx";
+import ApplicationsListSkeleton from "@/features/applications/components/applications-list-skeleton.tsx";
 
 export default function ApplicationsPage() {
   const [selectedPage, setSelectedPage] = useState("applications");
@@ -100,7 +100,7 @@ export default function ApplicationsPage() {
         </Select>
         {dialogButton}
       </div>
-      {isLoading ? <CompaniesListSkeleton/> : <ApplicationsList applications={applications}/>}
+      {isLoading ? <ApplicationsListSkeleton/> : <ApplicationsList applications={applications}/>}
     </main>
   )
 }

@@ -1,7 +1,7 @@
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
 import {Skeleton} from "@/components/ui/skeleton.tsx";
 
-export default function CompaniesListSkeleton() {
+export default function ApplicationsListSkeleton() {
   return (
     <div className="border rounded-lg overflow-hidden">
       <Table>
@@ -11,13 +11,16 @@ export default function CompaniesListSkeleton() {
               <Skeleton className={"w-16 h-5"} />
             </TableHead>
             <TableHead>
-              <Skeleton className={"w-28 h-5"} />
+              <Skeleton className={"w-24 h-5"} />
             </TableHead>
             <TableHead>
-              <Skeleton className={"w-28 h-5"} />
+              <Skeleton className={"w-20 h-5"} />
+            </TableHead>
+            <TableHead>
+              <Skeleton className={"w-16 h-5"} />
             </TableHead>
             <TableHead className={"flex items-center justify-end"}>
-              <Skeleton className={"w-16 h-5"} />
+              <Skeleton className={"w-28 h-5"} />
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -29,14 +32,16 @@ export default function CompaniesListSkeleton() {
                   <Skeleton className={"w-32 h-5 my-1"} />
                 </TableCell>
                 <TableCell>
-                  <Skeleton className={"w-5 h-5 my-1"} />
+                  <Skeleton className={"w-12 h-5 my-1"} />
                 </TableCell>
                 <TableCell>
-                  <Skeleton className={"w-40 h-5 my-1"} />
+                  <Skeleton className={"w-28 h-5 my-1"} />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className={"w-28 h-5 my-1"} />
                 </TableCell>
                 <TableCell className={"flex items-center justify-end"}>
-                  <Skeleton className={"w-12 h-5 mr-2"} />
-                  <Skeleton className={"w-12 h-5"} />
+                  <Skeleton className={"w-40 h-5 my-1"} />
                 </TableCell>
               </TableRow>
             ))
