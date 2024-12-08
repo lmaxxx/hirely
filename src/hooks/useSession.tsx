@@ -1,4 +1,4 @@
-import {createContext, ReactNode, useContext, useEffect, useState} from "react";
+import {createContext, PropsWithChildren, ReactNode, useContext, useEffect, useState} from "react";
 import {Session} from "@supabase/supabase-js";
 import supabase from "@/lib/supabase.ts";
 
@@ -10,7 +10,7 @@ export function useSession() {
   return useContext(SessionContext);
 }
 
-export function SessionProvider({children}: {children: ReactNode}) {
+export function SessionProvider({children}: PropsWithChildren) {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 

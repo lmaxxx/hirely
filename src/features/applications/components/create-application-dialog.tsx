@@ -13,7 +13,7 @@ import * as z from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form.tsx";
-import {ReactNode, useEffect, useState} from "react";
+import {PropsWithChildren, ReactNode, useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {useSession} from "@/hooks/useSession.tsx";
 import {createFormSchema} from "@/features/applications/form-validation.ts";
@@ -24,10 +24,9 @@ import {createApplication} from "@/features/applications/service.ts";
 type Props = {
   onClose: () => void;
   companies: Company[]
-  children: ReactNode;
 }
 
-export default function CreateApplicationFormDialog({onClose, companies, children}: Props) {
+export default function CreateApplicationFormDialog({onClose, companies, children}: PropsWithChildren<Props>) {
   const form = useForm<z.infer<typeof createFormSchema>>({
     resolver: zodResolver(createFormSchema),
     defaultValues: {
