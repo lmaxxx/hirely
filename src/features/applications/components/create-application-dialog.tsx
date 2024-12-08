@@ -114,7 +114,7 @@ export default function CreateApplicationFormDialog({onClose, companies, childre
             />
             <DialogFooter>
               <Button type="submit" disabled={isLoading}>
-                {isLoading && <Loader2 className="animate-spin"/>}
+                {isLoading && <Loader2 className="animate-spin mr-2 h-4 w-4"/>}
                 Create
               </Button>
             </DialogFooter>

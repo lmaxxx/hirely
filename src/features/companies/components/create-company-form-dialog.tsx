@@ -120,7 +120,7 @@ export default function CreateCompanyFormDialog({onClose, children}: Props) {
             />
             <DialogFooter>
               <Button type="submit" disabled={isLoading}>
-                {isLoading && <Loader2 className="animate-spin"/>}
+                {isLoading && <Loader2 className="animate-spin mr-2 h-4 w-4"/>}
                 Create
               </Button>
             </DialogFooter>

@@ -142,7 +142,7 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
             </div>
             <DialogFooter>
               <Button type="submit" disabled={isLoading || !isNewData()}>
-                {isLoading && <Loader2 className="animate-spin" />}
+                {isLoading && <Loader2 className="animate-spin mr-2 h-4 w-4"/>}
                 Save changes
               </Button>
             </DialogFooter>

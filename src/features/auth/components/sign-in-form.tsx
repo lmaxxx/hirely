@@ -85,7 +85,7 @@ export default function SignInForm() {
               )}
             />
             <Button type="submit" disabled={isLoading} className="w-full">
-              {isLoading && <Loader2 className="animate-spin" />}
+              {isLoading && <Loader2 className="animate-spin mr-2 h-4 w-4"/>}
               Sign In
             </Button>
           </form>
