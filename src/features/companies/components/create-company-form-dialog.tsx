@@ -9,23 +9,22 @@ import {
 import {Button} from "@/components/ui/button.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Loader2} from "lucide-react";
-import * as z from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
-import {PropsWithChildren, ReactNode, useEffect, useState} from "react";
+import {PropsWithChildren, useEffect, useState} from "react";
 import {createCompany} from "@/features/companies/service.ts";
 import {toast} from "react-toastify";
 import {useSession} from "@/hooks/useSession.tsx";
-import {createFormSchema} from "@/features/companies/form-validation.ts";
+import {createCompanyFormSchema, CreateCompanyFormValues} from "@/features/companies/form-validation.ts";
 
 type Props = {
   onClose: () => void;
 }
 
 export default function CreateCompanyFormDialog({onClose, children}: PropsWithChildren<Props>) {
-  const form = useForm<z.infer<typeof createFormSchema>>({
-    resolver: zodResolver(createFormSchema),
+  const form = useForm<CreateCompanyFormValues>({
+    resolver: zodResolver(createCompanyFormSchema),
     defaultValues: {
       name: "",
       logo: new DataTransfer().files,
@@ -37,7 +36,7 @@ export default function CreateCompanyFormDialog({onClose, children}: PropsWithCh
   const [isLoading, setIsLoading] = useState(false);
   form.watch("logo"); // force rerender after image selection
 
-  const onSubmit = async (values: z.infer<typeof createFormSchema>) => {
+  const onSubmit = async (values: CreateCompanyFormValues) => {
     try {
       setIsLoading(true);
       await createCompany(values, session?.user.id);

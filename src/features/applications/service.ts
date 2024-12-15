@@ -1,8 +1,8 @@
 import supabase from "@/lib/supabase.ts";
-import {createFormSchema} from "@/features/applications/form-validation.ts";
+import {createApplicationFormSchema} from "@/features/applications/form-validation.ts";
 import {z} from "zod";
 
-export async function createApplication({position, company}: z.infer<typeof createFormSchema>, userId?: string) {
+export async function createApplication({position, company}: z.infer<typeof createApplicationFormSchema>, userId?: string) {
   if(!userId) throw new Error("Unauthorized user");
   const {error} = await supabase.from("application")
     .insert({

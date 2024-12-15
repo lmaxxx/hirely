@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const editFormSchema = z.object({
+export const editCompanyFormSchema = z.object({
   logo: z.instanceof(FileList).superRefine((files, ctx) => {
     if(!files.length) return z.NEVER;
 
@@ -27,7 +27,9 @@ export const editFormSchema = z.object({
     }),
 });
 
-export const createFormSchema = z.object({
+export type EditCompanyFormValues = z.infer<typeof editCompanyFormSchema>
+
+export const createCompanyFormSchema = z.object({
   logo: z.instanceof(FileList).superRefine((files, ctx) => {
     if (!files.length) {
       ctx.addIssue({
@@ -60,3 +62,5 @@ export const createFormSchema = z.object({
       message: "Name must be at most 32 characters long.",
     })
 });
+
+export type CreateCompanyFormValues = z.infer<typeof createCompanyFormSchema>

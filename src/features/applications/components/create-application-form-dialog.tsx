@@ -9,14 +9,13 @@ import {
 import {Button} from "@/components/ui/button.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Loader2} from "lucide-react";
-import * as z from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form.tsx";
 import {PropsWithChildren, useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {useSession} from "@/hooks/useSession.tsx";
-import {createFormSchema} from "@/features/applications/form-validation.ts";
+import {createApplicationFormSchema, CreateApplicationFormValues} from "@/features/applications/form-validation.ts";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {Company} from "@/entities.type.ts";
 import {createApplication} from "@/features/applications/service.ts";
@@ -27,8 +26,8 @@ type Props = {
 }
 
 export default function CreateApplicationFormDialog({onClose, companies, children}: PropsWithChildren<Props>) {
-  const form = useForm<z.infer<typeof createFormSchema>>({
-    resolver: zodResolver(createFormSchema),
+  const form = useForm<CreateApplicationFormValues>({
+    resolver: zodResolver(createApplicationFormSchema),
     defaultValues: {
       position: "",
       company: ""
@@ -38,7 +37,7 @@ export default function CreateApplicationFormDialog({onClose, companies, childre
   const {session} = useSession();
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = async (values: z.infer<typeof createFormSchema>) => {
+  const onSubmit = async (values: CreateApplicationFormValues) => {
     try {
       setIsLoading(true);
       await createApplication(values, session?.user.id);

@@ -11,7 +11,6 @@ import {CompanyWithApplicationCount} from "@/entities.type.ts";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {DialogFooter} from "@/components/ui/dialog.tsx";
 import {useForm} from "react-hook-form";
-import * as z from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -19,7 +18,7 @@ import {toast} from "react-toastify";
 import {useEffect, useState} from "react";
 import {updateCompanyById} from "@/features/companies/service.ts";
 import {Loader2} from "lucide-react";
-import {editFormSchema} from "@/features/companies/form-validation.ts";
+import {editCompanyFormSchema, EditCompanyFormValues} from "@/features/companies/form-validation.ts";
 
 type Props = {
   company: CompanyWithApplicationCount;
@@ -31,8 +30,8 @@ const extensions = [StarterKit]
 export default function EditCompanyFormSheet({company, onUpdate}: Props) {
   const [isLoading, setIsLoading] = useState(false)
   const [open, setOpen] = useState(false);
-  const form = useForm<z.infer<typeof editFormSchema>>({
-    resolver: zodResolver(editFormSchema),
+  const form = useForm<EditCompanyFormValues>({
+    resolver: zodResolver(editCompanyFormSchema),
     defaultValues: {
       name: company.name,
       logo: new DataTransfer().files,
@@ -45,7 +44,7 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
     content: company.description ?? ""
   })
 
-  const onSubmit = async (values: z.infer<typeof editFormSchema>) => {
+  const onSubmit = async (values: EditCompanyFormValues) => {
     try {
       setIsLoading(true);
       const updatedCompany = (await updateCompanyById(company.id, values, editor?.getHTML() ?? "<p></p>"))[0];

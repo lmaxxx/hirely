@@ -1,7 +1,7 @@
 import {z} from "zod";
 import supabase from "@/lib/supabase.ts";
 import {uuid} from "@supabase/supabase-js/dist/module/lib/helpers";
-import {createFormSchema, editFormSchema} from "@/features/companies/form-validation.ts";
+import {createCompanyFormSchema, editCompanyFormSchema} from "@/features/companies/form-validation.ts";
 
 async function uploadLogoAndGetUrl(file: File) {
   const path = `${uuid()}.${file.type.split("/").pop()}`;
@@ -17,7 +17,7 @@ async function uploadLogoAndGetUrl(file: File) {
   return publicUrl;
 }
 
-export async function createCompany({logo, name}: z.infer<typeof createFormSchema>, userId?: string) {
+export async function createCompany({logo, name}: z.infer<typeof createCompanyFormSchema>, userId?: string) {
   if(!userId) throw new Error("Unauthorized user");
   const file = logo[0]
   const logoPublicUrl = await uploadLogoAndGetUrl(file)
@@ -52,7 +52,7 @@ export async function deleteCompanyById(id: number) {
   await deleteLogo(fileName);
 }
 
-export async function updateCompanyById(id: number, values: z.infer<typeof editFormSchema>, description: string) {
+export async function updateCompanyById(id: number, values: z.infer<typeof editCompanyFormSchema>, description: string) {
   const newData: {
     name: string;
     description: string;

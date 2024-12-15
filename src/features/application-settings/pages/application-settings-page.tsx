@@ -6,14 +6,14 @@ import {DialogFooter} from "@/components/ui/dialog.tsx";
 import {Loader2} from "lucide-react";
 import {useForm} from "react-hook-form";
 import * as z from "zod";
-import {createFormSchema} from "@/features/applications/form-validation.ts";
+import {createApplicationFormSchema} from "@/features/applications/form-validation.ts";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useState} from "react";
 
 export default function ApplicationSettingsPage () {
   const [isLoading, setIsLoading] = useState(false);
-  const form = useForm<z.infer<typeof createFormSchema>>({
-    resolver: zodResolver(createFormSchema),
+  const form = useForm<z.infer<typeof createApplicationFormSchema>>({
+    resolver: zodResolver(createApplicationFormSchema),
     defaultValues: {
       position: "",
       company: ""
