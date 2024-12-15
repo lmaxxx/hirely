@@ -6,7 +6,7 @@ import {
   SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider
 } from "@/components/ui/sidebar.tsx";
 import {ArrowLeft, Calendar, Home, Inbox, Search, Settings} from "lucide-react";
-import {NavLink, Outlet} from "react-router";
+import {NavLink, Outlet, useLocation} from "react-router";
 
 const items = [
   {
@@ -40,8 +40,11 @@ const items = [
     icon: Settings,
   },
 ]
-// TODO: refactor this component
+
 export default function DashboardLayout() {
+  const location = useLocation()
+  const activeMenuTitle = items.slice(1)
+    .find(item => location.pathname.includes(item.url.slice(1)))?.title ?? "Dashboard"
 
   return (
     <div className={"min-h-screen w-full"}>
@@ -56,20 +59,16 @@ export default function DashboardLayout() {
                 <SidebarMenu>
                   {items.map((item) => (
                     <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild>
+                      <SidebarMenuButton
+                        isActive={activeMenuTitle === item.title}
+                        asChild
+                      >
                         <NavLink
                           end={item.title === "Dashboard"}
                           to={item.url}
-                          className={({isActive}) => isActive ? "213" : ""}
                         >
-                          {/*{({ isActive }) => (*/}
-                          {/*  <>*/}
-                              <item.icon/>
-                              <span>{item.title}</span>
-                              {/*{isActive && <p>active</p>}*/}
-                          {/*  </>*/}
-
-                          {/*)}*/}
+                          <item.icon/>
+                          <span>{item.title}</span>
                         </NavLink>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -80,14 +79,14 @@ export default function DashboardLayout() {
           </SidebarContent>
           <SidebarFooter>
             <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <NavLink to={"/list/applications"}>
-                      <ArrowLeft/>
-                      <span>All applications</span>
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to={"/list/applications"}>
+                    <ArrowLeft/>
+                    All applications
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarFooter>
         </Sidebar>
