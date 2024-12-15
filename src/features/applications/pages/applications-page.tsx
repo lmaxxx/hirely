@@ -11,7 +11,7 @@ import {getAllApplicationsWithCompanyName} from "@/features/applications/service
 import ApplicationsList from "@/features/applications/components/applications-list.tsx";
 import {APPLICATIONS_LIMIT} from "&/env-variables.ts";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
-import CreateApplicationFormDialog from "@/features/applications/components/create-application-dialog.tsx";
+import CreateApplicationFormDialog from "@/features/applications/components/create-application-form-dialog.tsx";
 import ApplicationsListSkeleton from "@/features/applications/components/applications-list-skeleton.tsx";
 
 export default function ApplicationsPage() {

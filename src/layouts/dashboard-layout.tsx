@@ -98,7 +98,7 @@ export default function DashboardLayout() {
             </SidebarMenu>
           </SidebarFooter>
         </Sidebar>
-        <SidebarInset className={"p-1"}>
+        <SidebarInset>
           <Outlet/>
         </SidebarInset>
       </SidebarProvider>
