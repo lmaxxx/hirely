@@ -6,7 +6,7 @@ import CompaniesList from "@/features/companies/components/companies-list.tsx";
 import {deleteCompanyById, getAllCompanies} from "@/features/companies/service.ts";
 import {toast} from "react-toastify";
 import {useSession} from "@/hooks/useSession.tsx";
-import {Company} from "@/entities.type.ts";
+import {CompanyWithApplicationCount} from "@/entities.type.ts";
 import CompaniesListSkeleton from "@/features/companies/components/companies-list-skeleton.tsx";
 import {COMPANIES_LIMIT} from "&/env-variables.ts";
 import {Button} from "@/components/ui/button.tsx";
@@ -14,7 +14,7 @@ import {PlusCircle} from "lucide-react";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 
 export default function CompaniesPage() {
-  const [companies, setCompanies] = useState<Company[]>([]);
+  const [companies, setCompanies] = useState<CompanyWithApplicationCount[]>([]);
   const [selectedPage, setSelectedPage] = useState("companies");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +44,7 @@ export default function CompaniesPage() {
     await fetchCompanies();
   }
 
-  const updateCompany = (updatedCompany: Company) => {
+  const updateCompany = (updatedCompany: CompanyWithApplicationCount) => {
     setCompanies(oldCompanies => {
       const copy = [...oldCompanies!];
       return copy.map(company => {

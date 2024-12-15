@@ -1,18 +1,16 @@
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
-import {Company} from "@/entities.type.ts";
+import {CompanyWithApplicationCount} from "@/entities.type.ts";
 import {Frown} from "lucide-react";
 import DeleteCompanyDialog from "@/features/companies/components/delete-company-dialog.tsx";
 import EditCompanyFormSheet from "@/features/companies/components/edit-company-form-sheet.tsx";
 
 type Props = {
-  companies: Company[];
+  companies: CompanyWithApplicationCount[];
   onDelete: (id: number) => void;
-  onUpdate: (company: Company) => void;
+  onUpdate: (company: CompanyWithApplicationCount) => void;
 }
 
-//TODO connect applications to companies
 export default function CompaniesList({companies, onDelete, onUpdate}: Props) {
-
   if (!companies.length) {
     return (
       <div className={"mt-[25vh] text-xl"}>
@@ -38,7 +36,7 @@ export default function CompaniesList({companies, onDelete, onUpdate}: Props) {
             companies.map((company) => (
               <TableRow key={company.id} className={"h-12"}>
                 <TableCell className="font-medium">{company.name}</TableCell>
-                <TableCell>0</TableCell>
+                <TableCell>{company.application[0].count}</TableCell>
                 <TableCell>{new Date(company.modified_at).toLocaleString()}</TableCell>
                 <TableCell className="text-right">
                   <EditCompanyFormSheet onUpdate={onUpdate} company={company}/>

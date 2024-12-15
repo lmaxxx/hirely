@@ -34,7 +34,7 @@ export async function getAllCompanies(userId?: string) {
   if(!userId) throw new Error("Unauthorized user");
 
   const {data, error} = await supabase.from("company")
-    .select("*")
+    .select("*, application(count)", {count: "exact"})
     .eq("author", userId)
     .order("modified_at", {ascending: false})
 
@@ -76,7 +76,7 @@ export async function updateCompanyById(id: number, values: z.infer<typeof editF
   const {error, data} = await supabase.from("company")
     .update(newData)
     .eq("id", id)
-    .select("*");
+    .select("*, application(count)", {count: "exact"})
   if(error) throw error;
   return data;
 }

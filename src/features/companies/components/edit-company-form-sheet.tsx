@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/sheet.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {Company} from "@/entities.type.ts";
+import {CompanyWithApplicationCount} from "@/entities.type.ts";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {DialogFooter} from "@/components/ui/dialog.tsx";
 import {useForm} from "react-hook-form";
@@ -22,8 +22,8 @@ import {Loader2} from "lucide-react";
 import {editFormSchema} from "@/features/companies/form-validation.ts";
 
 type Props = {
-  company: Company;
-  onUpdate: (company: Company) => void;
+  company: CompanyWithApplicationCount;
+  onUpdate: (company: CompanyWithApplicationCount) => void;
 }
 
 const extensions = [StarterKit]
