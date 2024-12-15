@@ -5,7 +5,15 @@ import {
   SidebarGroupContent,
   SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider
 } from "@/components/ui/sidebar.tsx";
-import {ArrowLeft, Calendar, Home, Inbox, Search, Settings} from "lucide-react";
+import {
+  ArrowLeft,
+  BrainCircuit,
+  ChartPie,
+  Home,
+  LayoutDashboard,
+  Send,
+  Settings
+} from "lucide-react";
 import {NavLink, Outlet, useLocation} from "react-router";
 
 const items = [
@@ -17,22 +25,22 @@ const items = [
   {
     title: "Template",
     url: "./template",
-    icon: Inbox,
+    icon: LayoutDashboard,
   },
   {
     title: "Submissions",
     url: "./submissions",
-    icon: Calendar,
+    icon: Send,
   },
   {
     title: "CV reviewer",
     url: "./reviewer",
-    icon: Search,
+    icon: BrainCircuit,
   },
   {
     title: "Statistics",
     url: "./statistics",
-    icon: Search,
+    icon: ChartPie,
   },
   {
     title: "Settings",
@@ -90,7 +98,7 @@ export default function DashboardLayout() {
             </SidebarMenu>
           </SidebarFooter>
         </Sidebar>
-        <SidebarInset>
+        <SidebarInset className={"p-1"}>
           <Outlet/>
         </SidebarInset>
       </SidebarProvider>
