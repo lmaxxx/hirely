@@ -43,7 +43,7 @@ export async function getAllCompanies(userId?: string) {
   return data;
 }
 
-//TODO also delete all applications that is linked with this company
+//TODO also delete all applications that is linked with this company (and companies logos)
 export async function deleteCompanyById(id: number) {
   const {error: deleteCompanyError, data} = await supabase.from("company").delete().eq("id", id).select("*");
   if(deleteCompanyError || !data) throw deleteCompanyError;

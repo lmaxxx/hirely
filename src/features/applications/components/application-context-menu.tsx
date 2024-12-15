@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/context-menu.tsx";
 import {PropsWithChildren} from "react";
 
-//TODO: use application context
 export default function ApplicationContextMenu({children}: PropsWithChildren) {
   return (
     <ContextMenu>
