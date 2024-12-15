@@ -2,13 +2,19 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/c
 import {JoinedApplicationCompany} from "@/entities.type.ts";
 import {Frown} from "lucide-react";
 import {Badge} from "@/components/ui/badge.tsx";
-import ApplicationContextMenu from "@/features/applications/components/application-context-menu.tsx";
+import {useNavigate} from "react-router";
 
 type Props = {
   applications: JoinedApplicationCompany[];
 }
 
 export default function ApplicationsList({applications}: Props) {
+  const navigate = useNavigate();
+
+  const redirectToDashboard = (id: number) => {
+    navigate(`/dashboard/${id}`);
+  }
+
   if (!applications.length) {
     return (
       <div className={"mt-[25vh] text-xl"}>
@@ -33,7 +39,7 @@ export default function ApplicationsList({applications}: Props) {
         <TableBody>
           {
             applications.map((application) => (
-              <TableRow key={application.id} className={"h-12 cursor-pointer relative"}>
+              <TableRow onClick={() => redirectToDashboard(application.id)} key={application.id} className={"h-12 cursor-pointer relative"}>
                 <TableCell className="font-medium">{application.position}</TableCell>
                 <TableCell>0</TableCell>
                 <TableCell>{application.company.name ?? "ERROR"}</TableCell>
@@ -43,17 +49,6 @@ export default function ApplicationsList({applications}: Props) {
                 <TableCell className="text-right">
                   {new Date(application.modified_at).toLocaleString()}
                 </TableCell>
-                <ApplicationContextMenu>
-                  <TableCell className="font-medium">{application.position}</TableCell>
-                  <TableCell>0</TableCell>
-                  <TableCell>{application.company.name ?? "ERROR"}</TableCell>
-                  <TableCell>
-                    <Badge className={"bg-red-500 hover:bg-red-600"}>Not published</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {new Date(application.modified_at).toLocaleString()}
-                  </TableCell>
-                </ApplicationContextMenu>
               </TableRow>
             ))
           }

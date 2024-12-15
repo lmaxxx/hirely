@@ -10,6 +10,7 @@ type Props = {
   onUpdate: (company: Company) => void;
 }
 
+//TODO connect applications to companies
 export default function CompaniesList({companies, onDelete, onUpdate}: Props) {
 
   if (!companies.length) {
