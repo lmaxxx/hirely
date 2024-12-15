@@ -3,6 +3,7 @@ import {JoinedApplicationCompany} from "@/entities.type.ts";
 import {Frown} from "lucide-react";
 import {Badge} from "@/components/ui/badge.tsx";
 import {useNavigate} from "react-router";
+import ApplicationContextMenu from "@/features/applications/components/application-context-menu.tsx";
 
 type Props = {
   applications: JoinedApplicationCompany[];
@@ -39,17 +40,19 @@ export default function ApplicationsList({applications}: Props) {
         <TableBody>
           {
             applications.map((application) => (
-              <TableRow onClick={() => redirectToDashboard(application.id)} key={application.id} className={"h-12 cursor-pointer relative"}>
-                <TableCell className="font-medium">{application.position}</TableCell>
-                <TableCell>0</TableCell>
-                <TableCell>{application.company.name ?? "ERROR"}</TableCell>
-                <TableCell>
-                  <Badge className={"bg-red-500 hover:bg-red-600"}>Not published</Badge>
-                </TableCell>
-                <TableCell className="text-right">
-                  {new Date(application.modified_at).toLocaleString()}
-                </TableCell>
-              </TableRow>
+              <ApplicationContextMenu>
+                <TableRow onClick={() => redirectToDashboard(application.id)} key={application.id} className={"h-12 cursor-pointer relative"}>
+                  <TableCell className="font-medium">{application.position}</TableCell>
+                  <TableCell>0</TableCell>
+                  <TableCell>{application.company.name ?? "ERROR"}</TableCell>
+                  <TableCell>
+                    <Badge className={"bg-red-500 hover:bg-red-600"}>Not published</Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {new Date(application.modified_at).toLocaleString()}
+                  </TableCell>
+                </TableRow>
+              </ApplicationContextMenu>
             ))
           }
         </TableBody>

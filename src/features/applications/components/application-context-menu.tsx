@@ -11,7 +11,7 @@ import {PropsWithChildren} from "react";
 export default function ApplicationContextMenu({children}: PropsWithChildren) {
   return (
     <ContextMenu>
-      <ContextMenuTrigger>
+      <ContextMenuTrigger asChild>
         {children}
       </ContextMenuTrigger>
       <ContextMenuContent className="w-64">
