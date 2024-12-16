@@ -3,7 +3,6 @@ import {Select, SelectTrigger, SelectValue, SelectContent, SelectItem} from "@/c
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {getAllCompanies} from "@/features/companies/service.ts";
-import {toast} from "react-toastify";
 import {JoinedApplicationCompany, Company} from "@/entities.type.ts";
 import {useSession} from "@/hooks/use-session.tsx";
 import {Loader2, PlusCircle} from "lucide-react";
@@ -13,36 +12,30 @@ import {APPLICATIONS_LIMIT} from "&/env-variables.ts";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 import CreateApplicationFormDialog from "@/features/applications/components/create-application-form-dialog.tsx";
 import ApplicationsListSkeleton from "@/features/applications/components/applications-list-skeleton.tsx";
+import useHandleRequest from "@/hooks/use-handle-request.tsx";
 
 export default function ApplicationsPage() {
   const [selectedPage, setSelectedPage] = useState("applications");
   const [companies, setCompanies] = useState<Company[]>([]);
   const [applications, setApplications] = useState<JoinedApplicationCompany[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const {run: fetchApplicationsRequest, isLoading: isFetchApplicationLoading} = useHandleRequest();
+  const {run: fetchCompaniesRequest, isLoading: isFetchCompaniesLoading} = useHandleRequest();
   const {session} = useSession();
   const navigate = useNavigate();
 
-  const fetchData = async () => {
-    setIsLoading(true)
-    try {
-      await fetchCompanies();
-      await fetchApplications();
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
+  const fetchCompanies = () => fetchCompaniesRequest(
+    async () => {
+      const fetchedCompanies = await getAllCompanies(session?.user.id);
+      setCompanies(fetchedCompanies);
     }
-  }
+  )
 
-  const fetchCompanies = async () => {
-    const fetchedCompanies = await getAllCompanies(session?.user.id);
-    setCompanies(fetchedCompanies);
-  }
-
-  const fetchApplications = async () => {
-    const fetchedApplications = await getAllApplicationsWithCompanyName(session?.user.id);
-    setApplications(fetchedApplications);
-  }
+  const fetchApplications = () => fetchApplicationsRequest(
+    async () => {
+      const fetchedApplications = await getAllApplicationsWithCompanyName(session?.user.id);
+      setApplications(fetchedApplications);
+    }
+  )
 
   useEffect(() => {
     if(selectedPage === "companies") {
@@ -51,11 +44,12 @@ export default function ApplicationsPage() {
   }, [selectedPage]);
 
   useEffect(() => {
-    fetchData();
+    fetchCompanies()
+    fetchApplications()
   }, []);
 
   const dialogButton = (
-    ((applications.length ?? 0) >= APPLICATIONS_LIMIT || !companies.length) && !isLoading ?
+    ((applications.length ?? 0) >= APPLICATIONS_LIMIT || !companies.length) && !isFetchCompaniesLoading ?
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -73,14 +67,13 @@ export default function ApplicationsPage() {
                 :
                 <p>You can't create more than {APPLICATIONS_LIMIT} applications</p>
             }
-
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
       :
       <CreateApplicationFormDialog companies={companies} onClose={fetchApplications}>
-        <Button disabled={isLoading}>
-          {isLoading ? <Loader2 className="animate-spin mr-2 h-4 w-4"/> : <PlusCircle className="mr-2 h-4 w-4"/>}
+        <Button disabled={isFetchCompaniesLoading}>
+          {isFetchCompaniesLoading ? <Loader2 className="animate-spin mr-2 h-4 w-4"/> : <PlusCircle className="mr-2 h-4 w-4"/>}
           New Application
         </Button>
       </CreateApplicationFormDialog>
@@ -100,7 +93,7 @@ export default function ApplicationsPage() {
         </Select>
         {dialogButton}
       </div>
-      {isLoading ? <ApplicationsListSkeleton/> : <ApplicationsList applications={applications}/>}
+      {isFetchApplicationLoading ? <ApplicationsListSkeleton/> : <ApplicationsList applications={applications}/>}
     </main>
   )
 }

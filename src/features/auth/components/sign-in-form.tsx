@@ -15,9 +15,8 @@ import { Input } from "@/components/ui/input"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import {NavLink} from "react-router";
 import {signIn} from "@/features/auth/service.ts";
-import {toast} from "react-toastify";
 import {Loader2} from "lucide-react";
-import {useState} from "react";
+import useHandleRequest from "@/hooks/use-handle-request.tsx";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -29,7 +28,7 @@ const formSchema = z.object({
 })
 
 export default function SignInForm() {
-  const [isLoading, setIsLoading] = useState(false);
+  const {run, isLoading} = useHandleRequest();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,16 +37,10 @@ export default function SignInForm() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setIsLoading(true);
-    try {
-      await signIn(values);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  const onSubmit = (values: z.infer<typeof formSchema>) => run(
+    async () => { await signIn(values) }
+  )
+
 
   return (
     <Card className="max-w-[350px] w-[95%]">

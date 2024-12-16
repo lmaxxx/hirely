@@ -12,29 +12,25 @@ import {COMPANIES_LIMIT} from "&/env-variables.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {PlusCircle} from "lucide-react";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
+import useHandleRequest from "@/hooks/use-handle-request.tsx";
 
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState<CompanyWithApplicationCount[]>([]);
   const [selectedPage, setSelectedPage] = useState("companies");
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const {run, isLoading} = useHandleRequest();
   const {session} = useSession();
 
-  const fetchCompanies = async () => {
-    setIsLoading(true)
-    try {
+  const fetchCompanies = () => run(
+    async () => {
       const data = await getAllCompanies(session?.user.id);
       setCompanies(data);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
     }
-  }
+  )
 
   const deleteCompany = async (id: number) => {
     await toast.promise(
-      deleteCompanyById.bind(null, id),
+      () => deleteCompanyById(id),
       {
         pending: "Deleting...",
         success: "Company deleted successfully.",
@@ -48,14 +44,14 @@ export default function CompaniesPage() {
     setCompanies(oldCompanies => {
       const copy = [...oldCompanies!];
       return copy.map(company => {
-        if(company.id === updatedCompany.id) return updatedCompany;
+        if (company.id === updatedCompany.id) return updatedCompany;
         return company;
       }).sort((a, b) => new Date(b.modified_at).getTime() - new Date(a.modified_at).getTime());
     });
   }
 
   useEffect(() => {
-    if(selectedPage === "applications") {
+    if (selectedPage === "applications") {
       navigate("/list/applications");
     }
   }, [selectedPage]);
@@ -97,7 +93,7 @@ export default function CompaniesPage() {
       <div className="flex justify-between items-center mb-6">
         <Select onValueChange={setSelectedPage} value={selectedPage} defaultValue="applications">
           <SelectTrigger className="text-xl w-56 font-semibold">
-            <SelectValue placeholder="Select view" />
+            <SelectValue placeholder="Select view"/>
           </SelectTrigger>
           <SelectContent className={"text-xl font-semibold"}>
             <SelectItem value="applications">Your Applications</SelectItem>
@@ -106,7 +102,8 @@ export default function CompaniesPage() {
         </Select>
         {dialogButton}
       </div>
-      {isLoading ? <CompaniesListSkeleton/> : <CompaniesList onUpdate={updateCompany} onDelete={deleteCompany} companies={companies}/>}
+      {isLoading ? <CompaniesListSkeleton/> :
+        <CompaniesList onUpdate={updateCompany} onDelete={deleteCompany} companies={companies}/>}
     </main>
   )
 }

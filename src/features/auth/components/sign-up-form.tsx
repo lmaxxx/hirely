@@ -1,8 +1,8 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import {zodResolver} from "@hookform/resolvers/zod"
+import {useForm} from "react-hook-form"
 import * as z from "zod"
 
-import { Button } from "@/components/ui/button"
+import {Button} from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -11,13 +11,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
+import {Input} from "@/components/ui/input"
+import {Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter} from "@/components/ui/card"
 import {signUp} from "@/features/auth/service.ts";
-import {toast} from "react-toastify";
 import {NavLink} from "react-router";
-import {useState} from "react";
 import {Loader2} from "lucide-react";
+import useHandleRequest from "@/hooks/use-handle-request.tsx";
 
 export const formSchema = z.object({
   name: z.string().min(4, {
@@ -32,7 +31,7 @@ export const formSchema = z.object({
 })
 
 export default function SignUpForm() {
-  const [isLoading, setIsLoading] = useState(false);
+  const {run, isLoading} = useHandleRequest();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,16 +41,9 @@ export default function SignUpForm() {
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setIsLoading(true);
-    try {
-      await signUp(values);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  const onSubmit = (values: z.infer<typeof formSchema>) => run(
+    async () => { await signUp(values); }
+  )
 
   return (
     <Card className="max-w-[350px] w-[95%]">
@@ -65,39 +57,39 @@ export default function SignUpForm() {
             <FormField
               control={form.control}
               name="name"
-              render={({ field }) => (
+              render={({field}) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter your name" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage/>
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
               name="email"
-              render={({ field }) => (
+              render={({field}) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter your email" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage/>
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
               name="password"
-              render={({ field }) => (
+              render={({field}) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input type="password" placeholder="Enter your password" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage/>
                 </FormItem>
               )}
             />

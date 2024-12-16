@@ -14,9 +14,9 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {PropsWithChildren, useEffect, useState} from "react";
 import {createCompany} from "@/features/companies/service.ts";
-import {toast} from "react-toastify";
 import {useSession} from "@/hooks/use-session.tsx";
 import {createCompanyFormSchema, CreateCompanyFormValues} from "@/features/companies/form-validation.ts";
+import useHandleRequest from "@/hooks/use-handle-request.tsx";
 
 type Props = {
   onClose: () => void;
@@ -33,21 +33,20 @@ export default function CreateCompanyFormDialog({onClose, children}: PropsWithCh
   const fileRef = form.register("logo");
   const [open, setOpen] = useState(false);
   const {session} = useSession();
-  const [isLoading, setIsLoading] = useState(false);
+  const {run, isLoading} = useHandleRequest()
   form.watch("logo"); // force rerender after image selection
 
-  const onSubmit = async (values: CreateCompanyFormValues) => {
-    try {
-      setIsLoading(true);
+  const onSubmit = (values: CreateCompanyFormValues) => run(
+    async () => {
       await createCompany(values, session?.user.id);
       onClose();
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
+      setOpen(false);
+    },
+    () => {
       setOpen(false);
     }
-  }
+  )
+
 
   useEffect(() => {
     if (!open) {
@@ -57,13 +56,15 @@ export default function CreateCompanyFormDialog({onClose, children}: PropsWithCh
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild >
+      <DialogTrigger asChild>
         {children}
       </DialogTrigger>
       <DialogContent
         className="sm:max-w-[425px]"
-        onInteractOutside={isLoading ? (e) => e.preventDefault() : (_) => {}} // preventing close dialog while isLoading
-        onEscapeKeyDown={isLoading ? (e) => e.preventDefault() : (_) => {}}
+        onInteractOutside={isLoading ? (e) => e.preventDefault() : (_) => {
+        }} // preventing close dialog while isLoading
+        onEscapeKeyDown={isLoading ? (e) => e.preventDefault() : (_) => {
+        }}
         disabledCross={isLoading}
       >
         <DialogHeader>

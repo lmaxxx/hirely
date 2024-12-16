@@ -13,12 +13,12 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form.tsx";
 import {PropsWithChildren, useEffect, useState} from "react";
-import {toast} from "react-toastify";
 import {useSession} from "@/hooks/use-session.tsx";
 import {createApplicationFormSchema, CreateApplicationFormValues} from "@/features/applications/form-validation.ts";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {Company} from "@/entities.type.ts";
 import {createApplication} from "@/features/applications/service.ts";
+import useHandleRequest from "@/hooks/use-handle-request.tsx";
 
 type Props = {
   onClose: () => void;
@@ -35,20 +35,17 @@ export default function CreateApplicationFormDialog({onClose, companies, childre
   });
   const [open, setOpen] = useState(false);
   const {session} = useSession();
-  const [isLoading, setIsLoading] = useState(false);
+  const {run, isLoading} = useHandleRequest();
 
-  const onSubmit = async (values: CreateApplicationFormValues) => {
-    try {
-      setIsLoading(true);
+  const onSubmit = (values: CreateApplicationFormValues) => run(
+    async () => {
       await createApplication(values, session?.user.id);
       onClose();
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-      setOpen(false);
-    }
-  }
+      setOpen(false)
+    },
+    () => setOpen(false)
+  )
+
 
   useEffect(() => {
     if (!open) {
@@ -63,8 +60,10 @@ export default function CreateApplicationFormDialog({onClose, companies, childre
       </DialogTrigger>
       <DialogContent
         className="sm:max-w-[425px]"
-        onInteractOutside={isLoading ? (e) => e.preventDefault() : (_) => {}} // preventing close dialog while isLoading
-        onEscapeKeyDown={isLoading ? (e) => e.preventDefault() : (_) => {}}
+        onInteractOutside={isLoading ? (e) => e.preventDefault() : (_) => {
+        }} // preventing close dialog while isLoading
+        onEscapeKeyDown={isLoading ? (e) => e.preventDefault() : (_) => {
+        }}
         disabledCross={isLoading}
       >
         <DialogHeader>
@@ -95,7 +94,7 @@ export default function CreateApplicationFormDialog({onClose, companies, childre
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select company" />
+                        <SelectValue placeholder="Select company"/>
                       </SelectTrigger>
                       <SelectContent>
                         {

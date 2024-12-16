@@ -19,6 +19,7 @@ import {useEffect, useState} from "react";
 import {updateCompanyById} from "@/features/companies/service.ts";
 import {Loader2} from "lucide-react";
 import {editCompanyFormSchema, EditCompanyFormValues} from "@/features/companies/form-validation.ts";
+import useHandleRequest from "@/hooks/use-handle-request.tsx";
 
 type Props = {
   company: CompanyWithApplicationCount;
@@ -28,7 +29,7 @@ type Props = {
 const extensions = [StarterKit]
 
 export default function EditCompanyFormSheet({company, onUpdate}: Props) {
-  const [isLoading, setIsLoading] = useState(false)
+  const {run, isLoading} = useHandleRequest();
   const [open, setOpen] = useState(false);
   const form = useForm<EditCompanyFormValues>({
     resolver: zodResolver(editCompanyFormSchema),
@@ -44,19 +45,15 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
     content: company.description ?? ""
   })
 
-  const onSubmit = async (values: EditCompanyFormValues) => {
-    try {
-      setIsLoading(true);
+  const onSubmit = async (values: EditCompanyFormValues) => run(
+    async () => {
       const updatedCompany = (await updateCompanyById(company.id, values, editor?.getHTML() ?? "<p></p>"))[0];
       onUpdate(updatedCompany);
       toast.success("Company was updated successfully.");
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
       setOpen(false);
-    }
-  }
+    },
+    () => setOpen(false)
+  )
 
   const removeSelectedLogo = () => {
     // I used DataTransfer().items because FileList doesn't have its constructor
