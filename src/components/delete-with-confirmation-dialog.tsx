@@ -1,26 +1,31 @@
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger
 } from "@/components/ui/alert-dialog.tsx";
-import {Button} from "@/components/ui/button.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import {useEffect, useState} from "react";
+import {PropsWithChildren, useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 
 type Props = {
-  companyName: string;
   onDelete: () => void;
+  requiredString: string
+  description: string
 }
 
-export default function DeleteCompanyDialog({companyName, onDelete}: Props) {
+export default function DeleteWithConfirmationDialog({
+                                                       children,
+                                                       onDelete,
+                                                       requiredString,
+                                                       description
+}: PropsWithChildren<Props>) {
   const [open, setOpen] = useState(false);
   const {register, handleSubmit, reset, watch} = useForm({
-    defaultValues: {
-      input: ""
-    }
+    defaultValues: {input: ""}
   })
   const input = watch("input")
 
@@ -33,23 +38,25 @@ export default function DeleteCompanyDialog({companyName, onDelete}: Props) {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="text-destructive">Delete</Button>
+        {/*<Button variant="ghost" size="sm" className="text-destructive">Delete</Button>*/}
+        {children}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete
-            "<span className={"font-bold"}>{companyName}</span>" and remove all applications linked with this company.
+            {description.split("$$$")[0]}
+            "<span className={"font-bold"}>{requiredString}</span>"
+            {description.split("$$$")[1]}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <form onSubmit={handleSubmit(onDelete)}>
-            <Input {...register("input")}/>
+          <Input {...register("input")}/>
           <AlertDialogFooter className={"mt-2"}>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               type={"submit"}
-              disabled={input !== companyName}
+              disabled={input !== requiredString}
               className={"bg-destructive hover:bg-red-600"}
             >Delete</AlertDialogAction>
           </AlertDialogFooter>
