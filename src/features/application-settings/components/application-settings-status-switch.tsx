@@ -1,13 +1,13 @@
 import PublishStatusBadge from "@/components/publish-status-badge.tsx";
 import {Loader2} from "lucide-react";
 import {Switch} from "@/components/ui/switch.tsx";
-import {updateApplicationSettingsById} from "@/features/application-settings/service.ts";
 import useHandleRequest from "@/hooks/use-handle-request.tsx";
 import {useParams} from "react-router";
 import {Application} from "@/entities.type.ts";
+import {updateApplicationById} from "@/features/applications/service.ts";
 
 type Props = {
-  application: Application | null
+  application: Application
   setApplication: (value: Application) => void
 }
 
@@ -18,7 +18,7 @@ export default function ApplicationSettingsStatusSwitch({application, setApplica
   const handleToggle = () => {
     run(
       async () => {
-        const updatedApplication = await updateApplicationSettingsById(
+        const updatedApplication = await updateApplicationById(
           +applicationId!,
           {published_at: !application?.published_at ? new Date().toISOString() : null}
         )

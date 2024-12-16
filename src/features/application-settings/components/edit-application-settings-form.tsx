@@ -7,7 +7,6 @@ import {
   editApplicationSettings,
   EditApplicationSettingsValues
 } from "@/features/application-settings/form-validation.ts";
-import {updateApplicationSettingsById} from "@/features/application-settings/service.ts";
 import {toast} from "react-toastify";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -16,11 +15,12 @@ import StarterKit from "@tiptap/starter-kit";
 import {useEffect} from "react";
 import {useParams} from "react-router";
 import {Application} from "@/entities.type.ts";
+import {updateApplicationById} from "@/features/applications/service.ts";
 
 const extensions = [StarterKit]
 
 type Props = {
-  application: Application | null
+  application: Application
   setApplication: (value: Application) => void
 }
 
@@ -29,7 +29,7 @@ export default function EditApplicationSettingsForm({application, setApplication
   const {run, isLoading} = useHandleRequest();
   const editor = useEditor({
     extensions,
-    content: application?.description ?? ""
+    content: application.description ?? ""
   })
   const form = useForm({
     resolver: zodResolver(editApplicationSettings),
@@ -40,12 +40,12 @@ export default function EditApplicationSettingsForm({application, setApplication
   form.watch("position")
 
   const isNewData = () => {
-    return application?.position !== form.getValues("position") || editor?.getHTML() !== application?.description;
+    return application.position !== form.getValues("position") || editor?.getHTML() !== application.description;
   }
 
   const onSubmit = (values: EditApplicationSettingsValues) => run(
     async () => {
-      const updatedApplication = await updateApplicationSettingsById(
+      const updatedApplication = await updateApplicationById(
         +applicationId!,
         {...values, description: editor?.getHTML()}
       )
@@ -55,12 +55,12 @@ export default function EditApplicationSettingsForm({application, setApplication
   )
 
   const onReset = () => {
-    form.setValue("position", application!.position);
-    editor?.commands.setContent(application!.description)
+    form.setValue("position", application.position);
+    editor?.commands.setContent(application.description)
   }
 
   useEffect(() => {
-    if(application) {
+    if (application) {
       form.setValue("position", application.position);
     }
   }, [application]);

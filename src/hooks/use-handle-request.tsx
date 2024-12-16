@@ -1,7 +1,11 @@
 import {useState} from "react";
 import {toast} from "react-toastify";
 
-export default function useHandleRequest() {
+type Props = {
+  enableErrorToast?: boolean
+}
+
+export default function useHandleRequest({enableErrorToast = true}: Props = {}) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<null>(null);
 
@@ -13,7 +17,7 @@ export default function useHandleRequest() {
     } catch (error) {
       setError(error);
       if(errorCallback) errorCallback()
-      toast.error(error.message ?? "Something went wrong");
+      if(enableErrorToast) toast.error(error.message ?? "Something went wrong");
     } finally {
       setIsLoading(false);
     }
