@@ -1,7 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import * as z from "zod"
-
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -17,30 +15,22 @@ import {NavLink} from "react-router";
 import {signIn} from "@/features/auth/service.ts";
 import {Loader2} from "lucide-react";
 import useHandleRequest from "@/hooks/use-handle-request.tsx";
+import {signInFormSchema, SignInFormValues} from "@/features/auth/form-validation.ts";
 
-const formSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters long.",
-  }),
-})
 
 export default function SignInForm() {
   const {run, isLoading} = useHandleRequest();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<SignInFormValues>({
+    resolver: zodResolver(signInFormSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => run(
+  const onSubmit = (values: SignInFormValues) => run(
     async () => { await signIn(values) }
   )
-
 
   return (
     <Card className="max-w-[350px] w-[95%]">

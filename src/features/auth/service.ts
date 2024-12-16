@@ -1,9 +1,8 @@
 import supabase from "@/lib/supabase.ts";
 import {SignInWithPasswordCredentials} from "@supabase/supabase-js";
-import * as z from "zod";
-import {formSchema as signUpFormSchema} from "@/features/auth/components/sign-up-form.tsx";
+import {SignUpFormValues} from "@/features/auth/form-validation.ts";
 
-export async function signUp(credentials: z.infer<typeof signUpFormSchema>) {
+export async function signUp(credentials: SignUpFormValues) {
   const fullCredentials = {
     email: credentials.email,
     password: credentials.password,

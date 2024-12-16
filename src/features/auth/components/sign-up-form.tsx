@@ -1,6 +1,5 @@
 import {zodResolver} from "@hookform/resolvers/zod"
 import {useForm} from "react-hook-form"
-import * as z from "zod"
 
 import {Button} from "@/components/ui/button"
 import {
@@ -17,23 +16,12 @@ import {signUp} from "@/features/auth/service.ts";
 import {NavLink} from "react-router";
 import {Loader2} from "lucide-react";
 import useHandleRequest from "@/hooks/use-handle-request.tsx";
-
-export const formSchema = z.object({
-  name: z.string().min(4, {
-    message: "Name must be at least 4 characters long.",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters long.",
-  }),
-})
+import {signUpFormSchema, SignUpFormValues} from "@/features/auth/form-validation.ts";
 
 export default function SignUpForm() {
   const {run, isLoading} = useHandleRequest();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<SignUpFormValues>({
+    resolver: zodResolver(signUpFormSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -41,7 +29,7 @@ export default function SignUpForm() {
     },
   })
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => run(
+  const onSubmit = (values: SignUpFormValues) => run(
     async () => { await signUp(values); }
   )
 
