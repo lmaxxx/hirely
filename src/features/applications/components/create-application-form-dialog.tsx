@@ -46,7 +46,6 @@ export default function CreateApplicationFormDialog({onClose, companies, childre
     () => setOpen(false)
   )
 
-
   useEffect(() => {
     if (!open) {
       form.reset()
@@ -60,10 +59,8 @@ export default function CreateApplicationFormDialog({onClose, companies, childre
       </DialogTrigger>
       <DialogContent
         className="sm:max-w-[425px]"
-        onInteractOutside={isLoading ? (e) => e.preventDefault() : (_) => {
-        }} // preventing close dialog while isLoading
-        onEscapeKeyDown={isLoading ? (e) => e.preventDefault() : (_) => {
-        }}
+        onInteractOutside={isLoading ? (e) => e.preventDefault() : (_) => {}} // preventing close dialog while isLoading
+        onEscapeKeyDown={isLoading ? (e) => e.preventDefault() : (_) => {}}
         disabledCross={isLoading}
       >
         <DialogHeader>

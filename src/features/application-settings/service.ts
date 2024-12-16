@@ -1,11 +1,13 @@
 import supabase from "@/lib/supabase.ts";
+import {ApplicationUpdate} from "@/entities.type.ts";
 
-export async function updatePublishedState(id: number, isPublished: boolean) {
-  const publishedAtValue = isPublished ? new Date().toISOString() : null;
-  const {error} = await supabase.from("application")
-    .update({published_at: publishedAtValue})
+export async function updateApplicationSettingsById(id: number, newData: ApplicationUpdate) {
+  const {error, data} = await supabase.from("application")
+    .update(newData)
     .eq("id", id)
+    .select("*")
   if(error) throw error;
+  return data[0];
 }
 
 export async function getApplicationSettings(id: number) {
