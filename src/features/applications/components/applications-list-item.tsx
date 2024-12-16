@@ -1,8 +1,8 @@
 import {TableCell, TableRow} from "@/components/ui/table.tsx";
-import {Badge} from "@/components/ui/badge.tsx";
 import ApplicationContextMenu from "@/features/applications/components/application-context-menu.tsx";
 import {JoinedApplicationCompany} from "@/entities.type.ts";
 import {useNavigate} from "react-router";
+import PublishStatusBadge from "@/components/publish-status-badge.tsx";
 
 type Props = {
   application: JoinedApplicationCompany;
@@ -22,7 +22,10 @@ export default function ApplicationsListItem({application}: Props) {
         <TableCell>0</TableCell>
         <TableCell>{application.company.name ?? "ERROR"}</TableCell>
         <TableCell>
-          <Badge className={"bg-red-500 hover:bg-red-600"}>Not published</Badge>
+          <PublishStatusBadge
+            isPublished={!!application.published_at}
+            className={"text-xs"}
+          />
         </TableCell>
         <TableCell className="text-right">
           {new Date(application.modified_at).toLocaleString()}
