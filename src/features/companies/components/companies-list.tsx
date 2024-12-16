@@ -33,7 +33,7 @@ export default function CompaniesList({companies, onDelete, onUpdate}: Props) {
         <TableBody>
           {
             companies.map((company) => (
-              <CompaniesListItem company={company} onUpdate={onUpdate} onDelete={onDelete}/>
+              <CompaniesListItem key={company.id} company={company} onUpdate={onUpdate} onDelete={onDelete}/>
             ))
           }
         </TableBody>

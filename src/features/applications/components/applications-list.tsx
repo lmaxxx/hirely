@@ -32,7 +32,7 @@ export default function ApplicationsList({applications}: Props) {
         <TableBody>
           {
             applications.map((application) => (
-              <ApplicationsListItem application={application}/>
+              <ApplicationsListItem key={application.id} application={application}/>
             ))
           }
         </TableBody>
