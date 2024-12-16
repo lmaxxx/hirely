@@ -1,57 +1,38 @@
-import {Badge} from "@/components/ui/badge.tsx";
-import {Button} from "@/components/ui/button.tsx";
-import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form.tsx";
-import {Input} from "@/components/ui/input.tsx";
-import {DialogFooter} from "@/components/ui/dialog.tsx";
-import {Loader2} from "lucide-react";
-import {useForm} from "react-hook-form";
-import * as z from "zod";
-import {createApplicationFormSchema} from "@/features/applications/form-validation.ts";
-import {zodResolver} from "@hookform/resolvers/zod";
 import {useState} from "react";
+import {Switch} from "@/components/ui/switch.tsx";
+import {Loader2} from "lucide-react";
+import PublishStatusBadge from "@/components/publish-status-badge.tsx";
 
 export default function ApplicationSettingsPage () {
-  const [isLoading, setIsLoading] = useState(false);
-  const form = useForm<z.infer<typeof createApplicationFormSchema>>({
-    resolver: zodResolver(createApplicationFormSchema),
-    defaultValues: {
-      position: "",
-      company: ""
-    }
-  });
+  const [checked, setChecked] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleToggle = async () => {
+    setIsLoading(true)
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    setChecked(!checked)
+    setIsLoading(false)
+  }
 
   return (
     <main className="w-full min-h-screen">
       <h1 className={"text-2xl border-b p-3"}>Settings</h1>
       <div className={"p-3"}>
-        <div>
-          Status: <Badge className={"bg-red-500 hover:bg-red-600 text-sm"}>Not published</Badge>
+        <div className={"flex items-center justify-between gap-2"}>
+          <div className={"flex items-center justify-start gap-2"}>
+            Status:
+            <PublishStatusBadge isPublished={checked}/>
+            {isLoading && (
+              <Loader2 className="h-4 w-4 animate-spin text-gray-500"/>
+            )}
+          </div>
+          <Switch
+            checked={checked}
+            onCheckedChange={handleToggle}
+            disabled={isLoading}
+            className={"data-[state=checked]:bg-green-400"}
+          />
         </div>
-
-        <Form {...form}>
-          <form className={"space-y-4"}>
-            <FormField
-              control={form.control}
-              name={"position"}
-              render={({field}) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder={"Position"} {...field}/>
-                  </FormControl>
-                  <FormMessage/>
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
-              <Button type="submit" disabled={isLoading}>
-                {isLoading && <Loader2 className="animate-spin mr-2 h-4 w-4"/>}
-                Create
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-
-        <Button className={"bg-green-400"}>Publish</Button>
       </div>
     </main>
   )
