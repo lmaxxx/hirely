@@ -57,7 +57,7 @@ export default function RichEditor({content, setContent, valueToReset}: Props) {
           variant={"outline"}
           type={"button"}
           onClick={() => editor.chain().focus().toggleHeading({level: 2}).run()}
-          className={editor.isActive("heading", {level: 2}) && "font-semibold bg-muted"}
+          className={`${editor.isActive("heading", {level: 2})} && "font-semibold bg-muted"`}
         >
           H2
         </Button>
@@ -65,7 +65,7 @@ export default function RichEditor({content, setContent, valueToReset}: Props) {
           variant={"outline"}
           type={"button"}
           onClick={() => editor.chain().focus().toggleHeading({level: 3}).run()}
-          className={editor.isActive("heading", {level: 3}) && "font-semibold bg-muted"}
+          className={`${editor.isActive("heading", {level: 3}) && "font-semibold bg-muted"}`}
         >
           H3
         </Button>
@@ -73,7 +73,7 @@ export default function RichEditor({content, setContent, valueToReset}: Props) {
           variant={"outline"}
           type={"button"}
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={editor.isActive("bold") && "font-semibold bg-muted"}
+          className={`${editor.isActive("bold") && "font-semibold bg-muted"}`}
         >
           Bold
         </Button>
@@ -82,7 +82,7 @@ export default function RichEditor({content, setContent, valueToReset}: Props) {
           variant={"outline"}
           type={"button"}
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={editor.isActive("italic") && "font-semibold bg-muted"}
+          className={`${editor.isActive("italic") && "font-semibold bg-muted"}`}
         >
           Italic
         </Button>
@@ -91,7 +91,7 @@ export default function RichEditor({content, setContent, valueToReset}: Props) {
           variant={"outline"}
           type={"button"}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={editor.isActive("bulletList") && "font-semibold bg-muted"}
+          className={`${editor.isActive("bulletList") && "font-semibold bg-muted"}`}
         >
           Bullet List
         </Button>
@@ -100,7 +100,7 @@ export default function RichEditor({content, setContent, valueToReset}: Props) {
           variant={"outline"}
           type={"button"}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={editor.isActive("orderedList") && "font-semibold bg-muted"}
+          className={`${editor.isActive("orderedList") && "font-semibold bg-muted"}`}
         >
           Ordered List
         </Button>
