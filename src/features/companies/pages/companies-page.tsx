@@ -5,7 +5,7 @@ import CreateCompanyFormDialog from "@/features/companies/components/create-comp
 import CompaniesList from "@/features/companies/components/companies-list.tsx";
 import {deleteCompanyById, getAllCompanies} from "@/features/companies/service.ts";
 import {toast} from "react-toastify";
-import {useSession} from "@/hooks/useSession.tsx";
+import {useSession} from "@/hooks/use-session.tsx";
 import {CompanyWithApplicationCount} from "@/entities.type.ts";
 import CompaniesListSkeleton from "@/features/companies/components/companies-list-skeleton.tsx";
 import {COMPANIES_LIMIT} from "&/env-variables.ts";

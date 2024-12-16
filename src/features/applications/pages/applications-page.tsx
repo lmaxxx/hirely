@@ -5,7 +5,7 @@ import {useNavigate} from "react-router";
 import {getAllCompanies} from "@/features/companies/service.ts";
 import {toast} from "react-toastify";
 import {JoinedApplicationCompany, Company} from "@/entities.type.ts";
-import {useSession} from "@/hooks/useSession.tsx";
+import {useSession} from "@/hooks/use-session.tsx";
 import {Loader2, PlusCircle} from "lucide-react";
 import {getAllApplicationsWithCompanyName} from "@/features/applications/service.ts";
 import ApplicationsList from "@/features/applications/components/applications-list.tsx";

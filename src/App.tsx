@@ -1,6 +1,6 @@
 import CombinedRoutes from "@/combined-routes.tsx";
 import {Bounce, ToastContainer} from "react-toastify";
-import {SessionProvider} from "@/hooks/useSession.tsx";
+import {SessionProvider} from "@/hooks/use-session.tsx";
 
 import 'react-toastify/dist/ReactToastify.css';
 

@@ -1,4 +1,4 @@
-import {useSession} from "@/hooks/useSession.tsx";
+import {useSession} from "@/hooks/use-session.tsx";
 
 export default function ListHeader() {
   const {session} = useSession();

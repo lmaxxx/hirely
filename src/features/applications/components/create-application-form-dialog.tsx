@@ -14,7 +14,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/ui/form.tsx";
 import {PropsWithChildren, useEffect, useState} from "react";
 import {toast} from "react-toastify";
-import {useSession} from "@/hooks/useSession.tsx";
+import {useSession} from "@/hooks/use-session.tsx";
 import {createApplicationFormSchema, CreateApplicationFormValues} from "@/features/applications/form-validation.ts";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {Company} from "@/entities.type.ts";

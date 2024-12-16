@@ -15,7 +15,7 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 import {PropsWithChildren, useEffect, useState} from "react";
 import {createCompany} from "@/features/companies/service.ts";
 import {toast} from "react-toastify";
-import {useSession} from "@/hooks/useSession.tsx";
+import {useSession} from "@/hooks/use-session.tsx";
 import {createCompanyFormSchema, CreateCompanyFormValues} from "@/features/companies/form-validation.ts";
 
 type Props = {

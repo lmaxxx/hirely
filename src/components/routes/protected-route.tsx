@@ -1,5 +1,5 @@
 import {Outlet, useNavigate} from "react-router";
-import {useSession} from "@/hooks/useSession.tsx";
+import {useSession} from "@/hooks/use-session.tsx";
 import {useEffect} from "react";
 
 type Props = {

@@ -1,4 +1,4 @@
-import {createContext, PropsWithChildren, ReactNode, useContext, useEffect, useState} from "react";
+import {createContext, PropsWithChildren, useContext, useEffect, useState} from "react";
 import {Session} from "@supabase/supabase-js";
 import supabase from "@/lib/supabase.ts";
 
