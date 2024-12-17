@@ -12,21 +12,18 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 import {DialogFooter} from "@/components/ui/dialog.tsx";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
 import {toast} from "react-toastify";
 import {useEffect, useState} from "react";
 import {updateCompanyById} from "@/features/companies/service.ts";
 import {Loader2} from "lucide-react";
 import {editCompanyFormSchema, EditCompanyFormValues} from "@/features/companies/form-validation.ts";
 import useHandleRequest from "@/hooks/use-handle-request.tsx";
+import RichEditor from "@/components/rich-editor.tsx";
 
 type Props = {
   company: CompanyWithApplicationCount;
   onUpdate: (company: CompanyWithApplicationCount) => void;
 }
-
-const extensions = [StarterKit]
 
 export default function EditCompanyFormSheet({company, onUpdate}: Props) {
   const {run, isLoading} = useHandleRequest();
@@ -40,14 +37,11 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
   });
   const fileRef = form.register("logo");
   form.watch("logo"); // force rerender after image selection
-  const editor = useEditor({
-    extensions,
-    content: company.description ?? ""
-  })
+  const [descriptionContent, setDescriptionContent] = useState<string>("<p></p>");
 
   const onSubmit = async (values: EditCompanyFormValues) => run(
     async () => {
-      const updatedCompany = (await updateCompanyById(company.id, values, editor?.getHTML() ?? "<p></p>"))[0];
+      const updatedCompany = (await updateCompanyById(company.id, values, descriptionContent))[0];
       onUpdate(updatedCompany);
       toast.success("Company was updated successfully.");
       setOpen(false);
@@ -62,13 +56,13 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
 
   const isNewData = () => {
     const formValues = form.getValues();
-    return company.name !== formValues.name || !!formValues.logo?.[0] || editor?.getHTML() !== company.description;
+    return company.name !== formValues.name || !!formValues.logo?.[0] || descriptionContent !== company.description;
   }
 
   useEffect(() => {
     if(!open) {
       form.setValue("name", company.name)
-      editor?.commands.setContent(company.description)
+      setDescriptionContent(company.description)
       removeSelectedLogo();
       form.clearErrors();
     }
@@ -89,7 +83,7 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
         </SheetHeader>
         <SheetDescription/>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-4 mt-4"}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-4 mt-4 h-full overflow-y-auto"}>
             <img
               src={form.getValues("logo")?.[0] ? URL.createObjectURL(form.getValues("logo")?.[0]) : company.logo}
               alt="Selected image preview"
@@ -133,11 +127,15 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
                 </FormItem>
               )}
             />
-            <div className={"editor-container"}>
-              <EditorContent  editor={editor}/>
-            </div>
+            {
+              descriptionContent &&
+                <RichEditor
+                  content={descriptionContent}
+                  setContent={setDescriptionContent}
+                />
+            }
             <DialogFooter>
-              <Button type="submit" disabled={isLoading || !isNewData()}>
+              <Button type="submit" disabled={isLoading || !isNewData()} className={"mb-8"}>
                 {isLoading && <Loader2 className="animate-spin mr-2 h-4 w-4"/>}
                 Save changes
               </Button>

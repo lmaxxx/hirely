@@ -5,14 +5,17 @@ import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
 import Heading from "@tiptap/extension-heading";
 import {Button} from "@/components/ui/button.tsx";
+import {cn} from "@/lib/utils.ts";
+import "@/assets/rich-editor.css"
 
 type Props = {
   content: string;
   setContent: (content: string) => void;
   valueToReset?: string
+  editorClassName?: string;
 }
 
-export default function RichEditor({content, setContent, valueToReset}: Props) {
+export default function RichEditor({content, setContent, valueToReset, editorClassName}: Props) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -43,7 +46,7 @@ export default function RichEditor({content, setContent, valueToReset}: Props) {
 
   return (
     <div className={"max-w-2xl"}>
-      <div className={"flex gap-1 mb-2 items-center"}>
+      <div className={"flex flex-wrap gap-1 mb-2 items-center"}>
         <p>Description:</p>
         <Button
           variant={"outline"}
@@ -106,7 +109,7 @@ export default function RichEditor({content, setContent, valueToReset}: Props) {
         </Button>
       </div>
 
-      <div className={"editor-container"}>
+      <div className={cn("editor-container", editorClassName)}>
         <EditorContent editor={editor}/>
       </div>
     </div>

@@ -1,9 +1,8 @@
-import {z} from "zod";
 import supabase from "@/lib/supabase.ts";
 import {uuid} from "@supabase/supabase-js/dist/module/lib/helpers";
 import {
   CreateCompanyFormValues,
-  editCompanyFormSchema, EditCompanyFormValues
+  EditCompanyFormValues
 } from "@/features/companies/form-validation.ts";
 
 async function uploadLogoAndGetUrl(file: File) {

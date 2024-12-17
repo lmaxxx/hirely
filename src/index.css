@@ -94,36 +94,3 @@
 		@apply bg-background text-foreground;
 	}
 }
-
-.editor-container {
-	@apply border rounded-md px-3 py-1 shadow-sm;
-
-	div[contenteditable=true] {
-		@apply focus:outline-0 focus:border-0;
-	}
-}
-
-/*!* Style headings *!*/
-.editor-container h1 {
-	@apply text-3xl;
-}
-
-.editor-container h2 {
-	@apply text-2xl;
-}
-
-.editor-container h3 {
-	@apply text-xl;
-}
-
-.editor-container ul, ol {
-	@apply pl-4 py-2;
-}
-
-.editor-container ul {
-	@apply list-disc;
-}
-
-.editor-container ol {
-	@apply list-decimal;
-}
