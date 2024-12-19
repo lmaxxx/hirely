@@ -10,10 +10,12 @@ import DeleteWithConfirmationDialog from "@/components/delete-with-confirmation-
 import {Button} from "@/components/ui/button.tsx";
 import {deleteApplicationById, getApplicationById} from "@/features/applications/service.ts";
 import {toast} from "react-toastify";
+import ApplicationSettingsPageSkeleton
+  from "@/features/application-settings/components/application-settings-page-skeleton.tsx";
 
 export default function ApplicationSettingsPage () {
   const {run: getApplicationSettingsRequest, isLoading: isGetApplicationSettingsLoading} = useHandleRequest();
-  const {run: deleteApplicationRequest, isLoading: isDeleteApplicationRequestgLoading} = useHandleRequest({enableErrorToast: false});
+  const {run: deleteApplicationRequest, isLoading: isDeleteApplicationRequestLoading} = useHandleRequest({enableErrorToast: false});
   const [application, setApplication] = useState<Application | null>(null)
   const {applicationId} = useParams();
   const navigate = useNavigate();
@@ -41,8 +43,8 @@ export default function ApplicationSettingsPage () {
     )
   }, []);
 
-  if(isGetApplicationSettingsLoading || isDeleteApplicationRequestgLoading || !application) {
-    return <h1>Loading</h1>
+  if(isGetApplicationSettingsLoading || isDeleteApplicationRequestLoading || !application) {
+    return <ApplicationSettingsPageSkeleton/>
   }
 
   return (
