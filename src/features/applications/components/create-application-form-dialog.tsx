@@ -17,7 +17,7 @@ import {useSession} from "@/hooks/use-session.tsx";
 import {createApplicationFormSchema, CreateApplicationFormValues} from "@/features/applications/form-validation.ts";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {Company} from "@/entities.type.ts";
-import {createApplication} from "@/features/applications/service.ts";
+import {addNewApplication} from "@/features/applications/service.ts";
 import useHandleRequest from "@/hooks/use-handle-request.tsx";
 
 type Props = {
@@ -37,9 +37,9 @@ export default function CreateApplicationFormDialog({onClose, companies, childre
   const {session} = useSession();
   const {run, isLoading} = useHandleRequest();
 
-  const onSubmit = (values: CreateApplicationFormValues) => run(
+  const handleSubmit = (values: CreateApplicationFormValues) => run(
     async () => {
-      await createApplication(values, session?.user.id);
+      await addNewApplication(values, session?.user.id);
       onClose();
       setOpen(false)
     },
@@ -70,7 +70,7 @@ export default function CreateApplicationFormDialog({onClose, companies, childre
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-4"}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className={"space-y-4"}>
             <FormField
               control={form.control}
               name={"position"}

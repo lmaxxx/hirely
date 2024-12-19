@@ -14,7 +14,7 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {toast} from "react-toastify";
 import {useEffect, useState} from "react";
-import {updateCompanyById} from "@/features/companies/service.ts";
+import {modifyCompanyDetails} from "@/features/companies/service.ts";
 import {Loader2} from "lucide-react";
 import {editCompanyFormSchema, EditCompanyFormValues} from "@/features/companies/form-validation.ts";
 import useHandleRequest from "@/hooks/use-handle-request.tsx";
@@ -39,9 +39,9 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
   form.watch("logo"); // force rerender after image selection
   const [descriptionContent, setDescriptionContent] = useState<string>("<p></p>");
 
-  const onSubmit = async (values: EditCompanyFormValues) => run(
+  const handleSubmit = async (values: EditCompanyFormValues) => run(
     async () => {
-      const updatedCompany = (await updateCompanyById(company.id, values, descriptionContent))[0];
+      const updatedCompany = (await modifyCompanyDetails(company.id, values, descriptionContent))[0];
       onUpdate(updatedCompany);
       toast.success("Company was updated successfully.");
       setOpen(false);
@@ -83,7 +83,7 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
         </SheetHeader>
         <SheetDescription/>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-4 mt-4 h-full overflow-y-auto"}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className={"space-y-4 mt-4 h-full overflow-y-auto"}>
             <img
               src={form.getValues("logo")?.[0] ? URL.createObjectURL(form.getValues("logo")?.[0]) : company.logo}
               alt="Selected image preview"

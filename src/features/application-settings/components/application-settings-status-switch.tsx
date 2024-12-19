@@ -4,7 +4,7 @@ import {Switch} from "@/components/ui/switch.tsx";
 import useHandleRequest from "@/hooks/use-handle-request.tsx";
 import {useParams} from "react-router";
 import {Application} from "@/entities.type.ts";
-import {updateApplicationById} from "@/features/applications/service.ts";
+import {modifyApplication} from "@/features/applications/service.ts";
 
 type Props = {
   application: Application
@@ -18,7 +18,7 @@ export default function ApplicationSettingsStatusSwitch({application, setApplica
   const handleToggle = () => {
     run(
       async () => {
-        const updatedApplication = await updateApplicationById(
+        const updatedApplication = await modifyApplication(
           +applicationId!,
           {published_at: !application?.published_at ? new Date().toISOString() : null}
         )

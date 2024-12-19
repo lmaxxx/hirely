@@ -28,7 +28,7 @@ export default function SignInForm() {
     },
   });
 
-  const onSubmit = (values: SignInFormValues) => run(
+  const handleSubmit = (values: SignInFormValues) => run(
     async () => { await signIn(values) }
   )
 
@@ -40,7 +40,7 @@ export default function SignInForm() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="email"

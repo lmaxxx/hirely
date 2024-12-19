@@ -2,7 +2,7 @@ import supabase from "@/lib/supabase.ts";
 import {CreateApplicationFormValues} from "@/features/applications/form-validation.ts";
 import {ApplicationUpdate} from "@/entities.type.ts";
 
-export async function createApplication({position, company}: CreateApplicationFormValues, userId?: string) {
+export async function addNewApplication({position, company}: CreateApplicationFormValues, userId?: string) {
   if(!userId) throw new Error("Unauthorized user");
   const {error} = await supabase.from("application")
     .insert({
@@ -13,7 +13,7 @@ export async function createApplication({position, company}: CreateApplicationFo
   if(error) throw error;
 }
 
-export async function updateApplicationById(id: number, newData: ApplicationUpdate) {
+export async function modifyApplication(id: number, newData: ApplicationUpdate) {
   const {error, data} = await supabase.from("application")
     .update(newData)
     .eq("id", id)
@@ -22,7 +22,7 @@ export async function updateApplicationById(id: number, newData: ApplicationUpda
   return data[0];
 }
 
-export async function getAllApplicationsWithCompanyName(userId?: string) {
+export async function fetchApplicationsWithCompanyDetails(userId?: string) {
   if(!userId) throw new Error("Unauthorized user");
 
   const {data, error} = await supabase.from("application")
@@ -35,14 +35,14 @@ export async function getAllApplicationsWithCompanyName(userId?: string) {
   return data;
 }
 
-export async function getApplicationById(id: number) {
+export async function fetchApplicationById(id: number) {
   const {data, error} = await supabase.from("application").select("*").eq("id", id);
   if(error) throw error;
 
   return data[0];
 }
 
-export async function deleteApplicationById(id: number) {
+export async function removeApplication(id: number) {
   const {error} = await supabase.from("application")
     .delete().eq("id", id).select("*");
 

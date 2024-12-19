@@ -13,7 +13,7 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {PropsWithChildren, useEffect, useState} from "react";
-import {createCompany} from "@/features/companies/service.ts";
+import {addNewCompany} from "@/features/companies/service.ts";
 import {useSession} from "@/hooks/use-session.tsx";
 import {createCompanyFormSchema, CreateCompanyFormValues} from "@/features/companies/form-validation.ts";
 import useHandleRequest from "@/hooks/use-handle-request.tsx";
@@ -36,9 +36,9 @@ export default function CreateCompanyFormDialog({onClose, children}: PropsWithCh
   const {run, isLoading} = useHandleRequest()
   form.watch("logo"); // force rerender after image selection
 
-  const onSubmit = (values: CreateCompanyFormValues) => run(
+  const handleSubmit = (values: CreateCompanyFormValues) => run(
     async () => {
-      await createCompany(values, session?.user.id);
+      await addNewCompany(values, session?.user.id);
       onClose();
       setOpen(false);
     },
@@ -75,7 +75,7 @@ export default function CreateCompanyFormDialog({onClose, children}: PropsWithCh
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-4"}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className={"space-y-4"}>
             {form.getValues("logo") && form.getValues("logo")[0] && (
               <img
                 src={URL.createObjectURL(form.getValues("logo")[0])}
