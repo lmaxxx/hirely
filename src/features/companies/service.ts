@@ -5,7 +5,7 @@ import {
   EditCompanyFormValues
 } from "@/features/companies/form-validation.ts";
 
-async function uploadLogoAndGetUrl(file: File) {
+async function uploadLogoAndRetrieveUrl(file: File) {
   const path = `${uuid()}.${file.type.split("/").pop()}`;
   const { error: uploadError} = await supabase.storage.from("logo")
     .upload(path, file);
@@ -19,10 +19,10 @@ async function uploadLogoAndGetUrl(file: File) {
   return publicUrl;
 }
 
-export async function createCompany({logo, name}: CreateCompanyFormValues, userId?: string) {
+export async function addNewCompany({logo, name}: CreateCompanyFormValues, userId?: string) {
   if(!userId) throw new Error("Unauthorized user");
   const file = logo[0]
-  const logoPublicUrl = await uploadLogoAndGetUrl(file)
+  const logoPublicUrl = await uploadLogoAndRetrieveUrl(file)
   const {error: insertionError} = await supabase.from("company").insert({
     name,
     logo: logoPublicUrl,
@@ -32,7 +32,7 @@ export async function createCompany({logo, name}: CreateCompanyFormValues, userI
   if(insertionError) throw insertionError;
 }
 
-export async function getAllCompanies(userId?: string) {
+export async function fetchCompaniesWithApplications(userId?: string) {
   if(!userId) throw new Error("Unauthorized user");
 
   const {data, error} = await supabase.from("company")
@@ -46,15 +46,15 @@ export async function getAllCompanies(userId?: string) {
 }
 
 //TODO also delete all applications that is linked with this company (and companies logos)
-export async function deleteCompanyById(id: number) {
+export async function removeCompanyAndAssociatedData(id: number) {
   const {error: deleteCompanyError, data} = await supabase.from("company").delete().eq("id", id).select("*");
   if(deleteCompanyError || !data) throw deleteCompanyError;
 
   const fileName = data[0].logo.split("/").pop();
-  await deleteLogo(fileName);
+  await removeLogoFile(fileName);
 }
 
-export async function updateCompanyById(id: number, values: EditCompanyFormValues, description: string) {
+export async function modifyCompanyDetails(id: number, values: EditCompanyFormValues, description: string) {
   const newData: {
     name: string;
     description: string;
@@ -69,10 +69,10 @@ export async function updateCompanyById(id: number, values: EditCompanyFormValue
     if(logoError || !logos) throw logoError;
 
     const newLogo = values.logo[0];
-    newData.logo = await uploadLogoAndGetUrl(newLogo);
+    newData.logo = await uploadLogoAndRetrieveUrl(newLogo);
 
     const oldLogo = logos[0].logo.split("/").pop();
-    await deleteLogo(oldLogo);
+    await removeLogoFile(oldLogo);
   }
 
   const {error, data} = await supabase.from("company")
@@ -83,7 +83,7 @@ export async function updateCompanyById(id: number, values: EditCompanyFormValue
   return data;
 }
 
-async function deleteLogo(fileName: string | undefined) {
+async function removeLogoFile(fileName: string | undefined) {
   if(fileName) {
     const { error: deleteLogoError } = await supabase
       .storage

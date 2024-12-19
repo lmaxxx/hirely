@@ -2,11 +2,11 @@ import {Button} from "@/components/ui/button.tsx";
 import {Select, SelectTrigger, SelectValue, SelectContent, SelectItem} from "@/components/ui/select.tsx"
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
-import {getAllCompanies} from "@/features/companies/service.ts";
+import {fetchCompaniesWithApplications} from "@/features/companies/service.ts";
 import {JoinedApplicationCompany, Company} from "@/entities.type.ts";
 import {useSession} from "@/hooks/use-session.tsx";
 import {Loader2, PlusCircle} from "lucide-react";
-import {getAllApplicationsWithCompanyName} from "@/features/applications/service.ts";
+import {fetchApplicationsWithCompanyDetails} from "@/features/applications/service.ts";
 import ApplicationsList from "@/features/applications/components/applications-list.tsx";
 import {APPLICATIONS_LIMIT} from "&/env-variables.ts";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
@@ -25,14 +25,14 @@ export default function ApplicationsPage() {
 
   const fetchCompanies = () => fetchCompaniesRequest(
     async () => {
-      const fetchedCompanies = await getAllCompanies(session?.user.id);
+      const fetchedCompanies = await fetchCompaniesWithApplications(session?.user.id);
       setCompanies(fetchedCompanies);
     }
   )
 
   const fetchApplications = () => fetchApplicationsRequest(
     async () => {
-      const fetchedApplications = await getAllApplicationsWithCompanyName(session?.user.id);
+      const fetchedApplications = await fetchApplicationsWithCompanyDetails(session?.user.id);
       setApplications(fetchedApplications);
     }
   )

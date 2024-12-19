@@ -3,7 +3,7 @@ import {useNavigate} from "react-router";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import CreateCompanyFormDialog from "@/features/companies/components/create-company-form-dialog.tsx";
 import CompaniesList from "@/features/companies/components/companies-list.tsx";
-import {deleteCompanyById, getAllCompanies} from "@/features/companies/service.ts";
+import {removeCompanyAndAssociatedData, fetchCompaniesWithApplications} from "@/features/companies/service.ts";
 import {toast} from "react-toastify";
 import {useSession} from "@/hooks/use-session.tsx";
 import {CompanyWithApplicationCount} from "@/entities.type.ts";
@@ -23,14 +23,14 @@ export default function CompaniesPage() {
 
   const fetchCompanies = () => run(
     async () => {
-      const data = await getAllCompanies(session?.user.id);
+      const data = await fetchCompaniesWithApplications(session?.user.id);
       setCompanies(data);
     }
   )
 
-  const deleteCompany = async (id: number) => {
+  const removeCompany = async (id: number) => {
     await toast.promise(
-      () => deleteCompanyById(id),
+      () => removeCompanyAndAssociatedData(id),
       {
         pending: "Deleting...",
         success: "Company deleted successfully.",
@@ -40,7 +40,7 @@ export default function CompaniesPage() {
     await fetchCompanies();
   }
 
-  const updateCompany = (updatedCompany: CompanyWithApplicationCount) => {
+  const modifyCompany = (updatedCompany: CompanyWithApplicationCount) => {
     setCompanies(oldCompanies => {
       const copy = [...oldCompanies!];
       return copy.map(company => {
@@ -103,7 +103,7 @@ export default function CompaniesPage() {
         {dialogButton}
       </div>
       {isLoading ? <CompaniesListSkeleton/> :
-        <CompaniesList onUpdate={updateCompany} onDelete={deleteCompany} companies={companies}/>}
+        <CompaniesList onUpdate={modifyCompany} onDelete={removeCompany} companies={companies}/>}
     </main>
   )
 }

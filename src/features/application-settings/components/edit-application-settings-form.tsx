@@ -13,7 +13,7 @@ import useHandleRequest from "@/hooks/use-handle-request.tsx";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router";
 import {Application} from "@/entities.type.ts";
-import {updateApplicationById} from "@/features/applications/service.ts";
+import {modifyApplication} from "@/features/applications/service.ts";
 import RichEditor from "@/components/rich-editor.tsx";
 
 
@@ -40,7 +40,7 @@ export default function EditApplicationSettingsForm({application, setApplication
 
   const onSubmit = (values: EditApplicationSettingsValues) => run(
     async () => {
-      const updatedApplication = await updateApplicationById(
+      const updatedApplication = await modifyApplication(
         +applicationId!,
         {...values, description: descriptionContent}
       )

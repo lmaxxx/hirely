@@ -8,7 +8,7 @@ import EditApplicationSettingsForm from "@/features/application-settings/compone
 import SectionHeader from "@/components/section-header.tsx";
 import DeleteWithConfirmationDialog from "@/components/delete-with-confirmation-dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {deleteApplicationById, getApplicationById} from "@/features/applications/service.ts";
+import {removeApplication, fetchApplicationById} from "@/features/applications/service.ts";
 import {toast} from "react-toastify";
 import ApplicationSettingsPageSkeleton
   from "@/features/application-settings/components/application-settings-page-skeleton.tsx";
@@ -20,10 +20,10 @@ export default function ApplicationSettingsPage () {
   const {applicationId} = useParams();
   const navigate = useNavigate();
 
-  const onDelete = () => deleteApplicationRequest(
+  const handleDeleteApplication = () => deleteApplicationRequest(
     async () => {
       await toast.promise(
-        () => deleteApplicationById(+applicationId!),
+        () => removeApplication(+applicationId!),
         {
           pending: "Deleting...",
           success: "Company deleted successfully.",
@@ -37,7 +37,7 @@ export default function ApplicationSettingsPage () {
   useEffect(() => {
     getApplicationSettingsRequest(
       async () => {
-        const application = await getApplicationById(+applicationId!);
+        const application = await fetchApplicationById(+applicationId!);
         setApplication(application);
       }
     )
@@ -58,7 +58,7 @@ export default function ApplicationSettingsPage () {
           description={"This action cannot be undone. This will permanently " +
             "delete $$$ and remove all submissions " +
             "linked with this application."}
-          onDelete={onDelete}
+          onDelete={handleDeleteApplication}
         >
           <Button
             variant="ghost"
