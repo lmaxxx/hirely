@@ -61,9 +61,9 @@ export default function CreateCompanyFormDialog({onClose, children}: PropsWithCh
       </DialogTrigger>
       <DialogContent
         className="sm:max-w-[425px]"
-        onInteractOutside={isLoading ? (e) => e.preventDefault() : (_) => {
+        onInteractOutside={isLoading ? (e) => e.preventDefault() : () => {
         }} // preventing close dialog while isLoading
-        onEscapeKeyDown={isLoading ? (e) => e.preventDefault() : (_) => {
+        onEscapeKeyDown={isLoading ? (e) => e.preventDefault() : () => {
         }}
         disabledCross={isLoading}
       >

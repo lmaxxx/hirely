@@ -74,8 +74,8 @@ export default function EditCompanyFormSheet({company, onUpdate}: Props) {
         <Button className={"mr-2"} variant="ghost" size="sm">Edit</Button>
       </SheetTrigger>
       <SheetContent
-        onInteractOutside={isLoading ? (e) => e.preventDefault() : (_) => {}} // preventing close sheet while isLoading
-        onEscapeKeyDown={isLoading ? (e) => e.preventDefault() : (_) => {}}
+        onInteractOutside={isLoading ? (e) => e.preventDefault() : () => {}} // preventing close sheet while isLoading
+        onEscapeKeyDown={isLoading ? (e) => e.preventDefault() : () => {}}
         disabledCross={isLoading}
       >
         <SheetHeader>
