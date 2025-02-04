@@ -1,5 +1,10 @@
-export default function TemplatePage () {
+import TemplateStructure from "@/features/template/components/template-structure.tsx";
+
+export default function TemplatePage() {
   return (
-    <h1>TemplatePage</h1>
+    <main className="w-full max-h-screen h-screen">
+      <TemplateStructure/>
+    </main>
   )
 }
+
