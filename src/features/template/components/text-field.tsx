@@ -1,4 +1,4 @@
-import {Field} from "@/features/template/components/template-structure.tsx";
+import {Field} from "@/entities.type.ts";
 import {Input} from "@/components/ui/input.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import {GripVertical, Text} from "lucide-react";
@@ -20,7 +20,7 @@ export default function TextField({field}: Props) {
             {field.label}
             {field.required && <span className={"text-red-400"}> *</span>}
           </Label>
-          <Input id={field.name} placeholder={field.placeholder} disabled/>
+          <Input id={field.name} placeholder={field.placeholder ?? ""} disabled/>
         </div>
         <GripVertical className={"cursor-grab text-gray-500"}/>
       </div>

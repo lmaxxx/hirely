@@ -80,6 +80,118 @@ export type Database = {
         }
         Relationships: []
       }
+      field: {
+        Row: {
+          application: number
+          created_at: string
+          id: number
+          label: string
+          modified_at: string
+          name: string
+          order: number
+          placeholder: string | null
+          required: boolean
+          type: string
+        }
+        Insert: {
+          application: number
+          created_at?: string
+          id?: number
+          label?: string
+          modified_at?: string
+          name?: string
+          order?: number
+          placeholder?: string | null
+          required?: boolean
+          type?: string
+        }
+        Update: {
+          application?: number
+          created_at?: string
+          id?: number
+          label?: string
+          modified_at?: string
+          name?: string
+          order?: number
+          placeholder?: string | null
+          required?: boolean
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "field_application_fkey"
+            columns: ["application"]
+            isOneToOne: false
+            referencedRelation: "application"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      submission: {
+        Row: {
+          application: number
+          id: number
+          submitted_at: string
+        }
+        Insert: {
+          application: number
+          id?: number
+          submitted_at?: string
+        }
+        Update: {
+          application?: number
+          id?: number
+          submitted_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Submission_application_fkey"
+            columns: ["application"]
+            isOneToOne: false
+            referencedRelation: "application"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      submitted_field: {
+        Row: {
+          field: number
+          id: number
+          submission: number
+          submitted_at: string
+          value: string | null
+        }
+        Insert: {
+          field: number
+          id?: number
+          submission: number
+          submitted_at?: string
+          value?: string | null
+        }
+        Update: {
+          field?: number
+          id?: number
+          submission?: number
+          submitted_at?: string
+          value?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "submitted_field_field_fkey"
+            columns: ["field"]
+            isOneToOne: false
+            referencedRelation: "field"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "submitted_field_submission_fkey"
+            columns: ["submission"]
+            isOneToOne: false
+            referencedRelation: "submission"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -88,7 +200,16 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      FType:
+        | "Text"
+        | "Number"
+        | "Link"
+        | "TextArea"
+        | "List"
+        | "File"
+        | "Empty"
+        | "Checkbox"
+        | "Radio"
     }
     CompositeTypes: {
       [_ in never]: never

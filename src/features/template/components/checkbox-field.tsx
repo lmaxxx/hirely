@@ -1,7 +1,7 @@
-import {Field} from "@/features/template/components/template-structure.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import {GripVertical, SquareCheckBig} from "lucide-react";
 import {Checkbox} from "@/components/ui/checkbox.tsx";
+import {Field} from "@/entities.type.ts";
 
 type Props = {
   field: Field;

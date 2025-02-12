@@ -1,4 +1,4 @@
-import {Field} from "@/features/template/components/template-structure.tsx";
+import {Field} from "@/entities.type.ts";
 import {Input} from "@/components/ui/input.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import {GripVertical, Hash} from "lucide-react";
@@ -20,7 +20,7 @@ export default function NumberField({field}: Props) {
             {field.label}
             {field.required && <span className={"text-red-400"}> *</span>}
           </Label>
-          <Input id={field.name} placeholder={field.placeholder} disabled type={"number"}/>
+          <Input id={field.name} placeholder={field.placeholder ?? ""} disabled type={"number"}/>
         </div>
         <GripVertical className={"cursor-grab text-gray-500"}/>
       </div>
