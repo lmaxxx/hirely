@@ -1,10 +1,7 @@
-import {Field} from "@/features/template/components/template-structure.tsx";
+import {Field} from "@/entities.type.ts";
 import {GripVertical, Text} from "lucide-react";
-import {Label} from "@/components/ui/label.tsx";
 import {Input} from "@/components/ui/input.tsx";
-import {FormControl, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {Button} from "@/components/ui/button.tsx";
-
 
 type Props = {
   field: Field;

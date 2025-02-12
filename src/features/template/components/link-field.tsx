@@ -1,7 +1,7 @@
-import {Field} from "@/features/template/components/template-structure.tsx";
+import {Field} from "@/entities.type.ts";
 import {Input} from "@/components/ui/input.tsx";
 import {Label} from "@/components/ui/label.tsx";
-import {GripVertical, Hash, Link} from "lucide-react";
+import {GripVertical, Link} from "lucide-react";
 
 type Props = {
   field: Field;
@@ -20,7 +20,7 @@ export default function LinkField({field}: Props) {
             {field.label}
             {field.required && <span className={"text-red-400"}> *</span>}
           </Label>
-          <Input id={field.name} placeholder={field.placeholder} disabled type={"url"}/>
+          <Input id={field.name} placeholder={field.placeholder ?? ""} disabled type={"url"}/>
         </div>
         <GripVertical className={"cursor-grab text-gray-500"}/>
       </div>

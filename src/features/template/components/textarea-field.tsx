@@ -1,4 +1,4 @@
-import {Field} from "@/features/template/components/template-structure.tsx";
+import {Field} from "@/entities.type.ts";
 import {AlignCenter, GripVertical} from "lucide-react";
 import {Label} from "@/components/ui/label.tsx";
 import {Textarea} from "@/components/ui/textarea.tsx";
@@ -21,7 +21,7 @@ export default function TextareaField({field}: Props) {
             {field.label}
             {field.required && <span className={"text-red-400"}> *</span>}
           </Label>
-          <Textarea id={field.name} placeholder={field.placeholder} disabled className={"resize-none"}/>
+          <Textarea id={field.name} placeholder={field.placeholder ?? ""} disabled className={"resize-none"}/>
         </div>
         <GripVertical className={"cursor-grab text-gray-500"}/>
       </div>
